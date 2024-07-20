@@ -1,12 +1,86 @@
 {
+  "build": {
+    "copyright": "Luis Tronilo dev STManagement.",
+    "directories": {
+      "output": "release",
+      "buildResources": "dist"
+    },
+    "files": [
+      "**/*",
+      "dist/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico",
+      "publish": {
+        "provider": "github",
+        "owner": "tronilo53",
+        "repo": "STManagement",
+        "private": true,
+        "releaseType": "release"
+      }
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns",
+      "publish": {
+        "provider": "github",
+        "owner": "tronilo53",
+        "repo": "STManagement",
+        "private": true,
+        "releaseType": "release"
+      }
+    },
+    "asar": false,
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "removeDefaultUninstallWelcomePage": false,
+      "installerIcon": "build/installerIcon.ico",
+      "uninstallerIcon": "build/uninstallerIcon.ico",
+      "installerHeaderIcon": "build/installerHeaderIcon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "menuCategory": false,
+      "shortcutName": "STManagement",
+      "runAfterFinish": false,
+      "include": "build/customInstaller.nsh"
+    },
+    "dmg": {
+      "background": "build/background.png",
+      "iconSize": 80,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    }
+  },
   "name": "stmanagement",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "main": "main.mjs",
+  "type": "module",
+  "license": "MIT",
+  "description": "STManagement Aplicación para la gestión de Stock",
+  "author": "Luis TM - STManagement",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "electron .",
+    "build": "ng build && electron-builder",
+    "build:p": "ng build && electron-builder --publish always"
   },
   "private": true,
   "dependencies": {
@@ -18,7 +92,15 @@
     "@angular/platform-browser": "^17.1.0",
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^5.3.3",
+    "electron-is-dev": "^2.0.0",
+    "electron-store": "^10.0.0",
+    "electron-updater": "^6.2.1",
+    "jquery": "^3.7.1",
+    "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.12.3",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
@@ -27,6 +109,8 @@
     "@angular/cli": "^17.1.2",
     "@angular/compiler-cli": "^17.1.0",
     "@types/jasmine": "~5.1.0",
+    "electron": "^31.2.1",
+    "electron-builder": "^24.13.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
