@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Righteous';
+    src: url('./assets/fonts/Righteous/Righteous-Regular.woff2') format('woff2'),
+        url('./assets/fonts/Righteous/Righteous-Regular.woff') format('woff'),
+        url('./assets/fonts/Righteous/Righteous-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('./assets/fonts/ubuntu/Ubuntu-Regular.woff2') format('woff2'),
+        url('./assets/fonts/ubuntu/Ubuntu-Regular.woff') format('woff'),
+        url('./assets/fonts/ubuntu/Ubuntu-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class PreloadComponent {
 
+  public year: number = new Date().getFullYear();
+
+  constructor() {}
 }

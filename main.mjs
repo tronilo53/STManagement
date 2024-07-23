@@ -1,7 +1,7 @@
 /**
  * * Importaciones de Módulos
  */
-import { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, Tray, screen, nativeImage } from "electron";
 import isDev from "electron-is-dev";
 import pkg from "electron-updater";
 import Store from "electron-store";
@@ -12,14 +12,39 @@ const { autoUpdater } = pkg;
 const store = new Store();
 const __dirname = path.resolve();
 
-const PATH_ASSETS_PROD = path.join(__dirname, 'resources', 'app', 'src', 'assets');
-const PATH_ASSETS_DEV = path.join(__dirname, 'src', 'assets');
-const PATH_DIST_PROD = path.join(__dirname, 'resources', 'app', 'dist');
-const PATH_CHANGELOG_PROD = path.join(__dirname, 'resources', 'app', 'CHANGELOG.md');
-const PATH_CHANGELOG_DEV = path.join(__dirname, 'CHANGELOG.md');
-const ICON_PLATFORM = process.platform === 'darwin' ? 'icon.icns' : 'icon.png';
-const PATH_ICON = isDev ? path.join(PATH_ASSETS_DEV, ICON_PLATFORM) : path.join(PATH_ASSETS_PROD, ICON_PLATFORM);
-const PATH_ICON_NATIVE = nativeImage.createFromPath(PATH_ICON);
+const URL_PRELOAD = process.platform === 'darwin' ? 
+(isDev ? 'http://localhost:4200/#/Preload' : `file://${path.join(process.resourcesPath, 'app', 'dist', app.name, 'browser', 'index.html#', 'Preload')}`) : 
+(isDev ? 'http://localhost:4200/#/Preload' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'browser', 'index.html#', 'Preload')}`);
+const URL_HOME = process.platform === 'darwin' ? 
+(isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app', 'dist', app.name, 'browser', 'index.html')}`) : 
+(isDev ? 'http://localhost:4200/' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'browser', 'index.html')}`);
+const ASSETS = process.platform === 'darwin' ?
+(isDev ? path.join(__dirname, 'src', 'assets') : path.join(process.resourcesPath, 'app', 'src', 'assets')) :
+(isDev ? path.join(__dirname, 'src', 'assets') : path.join(__dirname, 'resources', 'app', 'src', 'assets'));
+const CHANGELOG = process.platform === 'darwin' ?
+(isDev ? path.join(__dirname, 'CHANGELOG.md') : path.join(process.resourcesPath, 'app', 'CHANGELOG.md')) :
+(isDev ? path.join(__dirname, 'CHANGELOG.md') : path.join(__dirname, 'resources', 'app', 'CHANGELOG.md'));
+const ICON = process.platform === 'darwin' ?
+(isDev ? path.join(__dirname, 'src', 'assets', 'icon.icns') : path.join(process.resourcesPath, 'app', 'src', 'assets', 'icon.icn')) :
+(isDev ? path.join(__dirname, 'src', 'assets', 'icon.png') : path.join(__dirname, 'resources', 'app', 'src', 'assets', 'icon.png'));
+const ICON_NATIVE = nativeImage.createFromPath(ICON);
+const MENU_TEMPLATE = isDev ? [
+    {
+        label: app.name,
+        submenu: [
+            { role: 'toggledevtools' },
+            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
+        ]
+    }
+] : [
+    {
+        label: app.name,
+        submenu: [
+            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
+        ]
+    }
+];
+const MENU = Menu.buildFromTemplate( MENU_TEMPLATE );
 
 /**
  * * Propiedades de AutoUpdater
@@ -31,75 +56,43 @@ autoUpdater.autoRunAppAfterInstall = true;
  * * Declaraciones de Variables
  */
 let appWin;
-let appPrelaod;
+let appPreload;
 let tray = null;
-
-/**
- * * Preparación del Menú
- */
-let menuTemplateDev = [
-    {
-        label: 'Archivo',
-        submenu: [
-            { role: 'toggledevtools' },
-            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
-        ]
-    }
-];
-let menuTemplateProd = [
-    {
-        label: 'Archivo',
-        submenu: [
-            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
-        ]
-    }
-];
-const menu = Menu.buildFromTemplate( isDev ? menuTemplateDev : menuTemplateProd );
 
 /**
  * * Función de ventana Preload
  */
 function appInit() {
-    if(!PATH_ICON_NATIVE.isEmpty()) console.log(`Icono cargado desde: ${PATH_ICON}`);
-    else console.log(`No se ha podido cargar el icono desde: ${PATH_ICON}`);
     //Instancia de una nueva ventana
-    appPrelaod = new BrowserWindow(
+    appPreload = new BrowserWindow(
         {
             width: 600, 
             height: 400,
             resizable: false,
-            center: true,
+            x: Math.round( (screen.getPrimaryDisplay().workAreaSize.width - 600) / 2 ),
+            y: Math.round( (screen.getPrimaryDisplay().workAreaSize.height - 400) / 2 ),
             webPreferences: { 
                 contextIsolation: false, 
-                nodeIntegration: true 
+                nodeIntegration: true
             },
             frame: false,
             transparent: false,
             alwaysOnTop: false,
-            icon: PATH_ICON_NATIVE
+            icon: ICON_NATIVE
         }
     );
-    appPrelaod.loadURL(isDev ? 'http://localhost:4200/#/Preload' : `file://${PATH_DIST_PROD}/browser/index.html#/Preload`);
-    
+    appPreload.loadURL(URL_PRELOAD);
     //Cuando la ventana está lista para ser mostrada...
-    appPrelaod.once( "ready-to-show", () => {
-        /*setTimeout(() => {
+    appPreload.once( "ready-to-show", () => {
+        setTimeout(() => {
             //Cierra la ventana de Preload
-            appPrelaod.close();
+            appPreload.close();
             //Crea la ventana principal
             createHome();
-        }, 3000);*/
-    });
-    appPrelaod.on('close', (event) => {
-        if(process.platform === 'darwin') {
-            if(!app.isQuitting) {
-                event.preventDefault();
-                appPrelaod.hide();
-            }
-        }
+        }, 3000);
     });
     //Cuando se llama a .close() la ventana Preload se cierra
-    appPrelaod.on( "closed", () => appPrelaod = null );
+    appPreload.on( "closed", () => appPreload = null );
 }
 /**
  * * Función de ventana principal
@@ -111,16 +104,16 @@ function createHome() {
             width: 950, 
             height: 720,
             resizable: false,
-            center: true, 
+            x: Math.round( (screen.getPrimaryDisplay().workAreaSize.width - 950) / 2 ),
+            y: Math.round( (screen.getPrimaryDisplay().workAreaSize.height - 720) / 2 ), 
             webPreferences: { 
                 contextIsolation: false, 
                 nodeIntegration: true 
-            }
+            },
+            icon: ICON_NATIVE
         });
-    //Si se está en modo de desarrollo...
-    appWin.setIcon(isDev ? `${PATH_ASSETS_DEV}/favicon.png` : `${PATH_ASSETS_PROD}/favicon.png`);
-    appWin.setMenu(menu);
-    appWin.loadURL(isDev ? 'http://localhost:4200/' : `${PATH_DIST_PROD}/browser/index.html`);
+    appWin.loadURL(URL_HOME);
+    if(process.platform === 'win32') appWin.setMenu(MENU);
     if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
     
     //Cuando la ventana está lista para ser mostrada...
@@ -146,10 +139,11 @@ function createHome() {
 app.whenReady().then( () => {
     //Se crea la app..
     appInit();
+    if(process.platform === 'darwin') Menu.setApplicationMenu(MENU);
     //Si estamos en windows...
     if(process.platform === 'win32') {
         //Se crea una instancia de 'Tray' (Icono en la barra de tareas)
-        tray = new Tray(PATH_ICON);
+        tray = new Tray(ICON);
         //Se crea un nombre para la bandeja
         tray.setToolTip('STManagement');
         //Se crea un menu para la bandeja
@@ -161,11 +155,8 @@ app.whenReady().then( () => {
  * * Acciones para cerrar la App en MacOs
  */
 app.on( "window-all-closed", () => {
-    if( process.platform !== 'darwin' ) app.quit();
+    app.quit();
 });
-app.on('before-quit', () => {
-    app.isQuitting = true;
-  });
 
 /**
  * * Comunicación entre procesos

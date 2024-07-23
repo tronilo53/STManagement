@@ -3,11 +3,12 @@
     "copyright": "Luis Tronilo dev STManagement.",
     "directories": {
       "output": "release",
-      "buildResources": "dist"
+      "buildResources": "build"
     },
     "files": [
       "**/*",
-      "dist/**/*"
+      "dist/**/*",
+      "build/**/*"
     ],
     "win": {
       "target": "nsis",
@@ -49,6 +50,7 @@
       "include": "build/customInstaller.nsh"
     },
     "dmg": {
+      "icon": "build/icon.icns",
       "background": "build/background.png",
       "iconSize": 80,
       "contents": [
@@ -69,7 +71,7 @@
       }
     }
   },
-  "name": "stmanagement",
+  "name": "STManagement",
   "version": "1.0.0",
   "main": "main.mjs",
   "type": "module",
@@ -98,6 +100,7 @@
     "electron-store": "^10.0.0",
     "electron-updater": "^6.2.1",
     "jquery": "^3.7.1",
+    "material-symbols": "^0.21.2",
     "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.12.3",

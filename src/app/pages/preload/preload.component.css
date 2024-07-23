@@ -1,0 +1,17 @@
+.icon {
+    width: 8rem;
+    text-align: center;
+}
+.title {
+    font-family: 'Righteous';
+}
+.spinner-grow {
+    width: 1rem;
+    height: 1rem;
+    margin: 0 3px;
+}
+.copy {
+    margin-left: 1rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
