@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
    */
   public isDropdownActive(): boolean {
     return this.currentUrl === '/Dashboard/Simulation' ||
-           this.currentUrl === '/Dashboard/Invoices' ||
+           this.currentUrl === '/Dashboard/Orders' ||
            this.currentUrl === '/Dashboard/Taxs';
   }
 }

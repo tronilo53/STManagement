@@ -14,13 +14,13 @@
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/Dashboard/Stock']" routerLinkActive="active">Stock</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" *ngIf="storageService.getUserData().tipo_usuario === 'adm'">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive() }">Gestiones</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" [routerLink]="['/Dashboard/Simulation']" routerLinkActive="active">Simulación</a></li>
-                        <li><a class="dropdown-item" href="#">Facturas</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Orders']" routerLinkActive="active" >Pedidos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Datos Fiscales</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Taxs']" routerLinkActive="active" >Datos Fiscales</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
