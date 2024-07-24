@@ -1,0 +1,44 @@
+<div class="profile" class="animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="container_avatar">
+                    <img [ngClass]="{'avatar_default': storageService.getUserData().avatar === 'assets/avatars/default.png', 'avatar': storageService.getUserData().avatar !== 'assets/avatars/default.png'}" [src]="storageService.getUserData().avatar" alt="avatar.png">
+                    <span class="title">Perfil de Usuario</span>
+                </div>
+                <div class="card mt-4 p-3">
+                    <h3 class="mb-3">Cambiar Tema</h3>
+                    <div class="form-check mb-3" *ngFor="let theme of storageService.getThemes(); let i = index">
+                        <input class="form-check-input" type="radio" name="radioTheme" [value]="theme" id="flexCheckDefault{{ i }}" style="margin-top: 1.3rem;" [(ngModel)]="selectedTheme">
+                        <app-navbar-theme [typeNav]="getType(theme)"></app-navbar-theme>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" [class]="storageService.getThemeCss('button')" (click)="setTheme()">Establecer Tema</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col text-center">
+                <div class="card mb-3">
+                    <h3 class="mb-3">Cambiar Avatar</h3>
+                    <div class="listAvatar mb-4">
+                        <img class="avatarList" [ngClass]="{'select-avatar' : avatarSelect === avatar}" [src]="avatar" alt="avatar.png" *ngFor="let avatar of storageService.getAvatars()" (click)="selectAvatar(avatar)">
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" [class]="storageService.getThemeCss('button') + ' w-50'" (click)="setAvatar()">Establecer Avatar</button>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-header" *ngIf="storageService.getUserData().tipo_usuario === 'adm'">Zona Administrador</div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <a [class]="storageService.getThemeCss('button') + ' w-100 disabled'">Gestionar Usuarios</a>
+                        </div>
+                        <div class="mb-2">
+                            <a [class]="storageService.getThemeCss('button') + ' w-100 disabled'">Añadir Usuarios</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

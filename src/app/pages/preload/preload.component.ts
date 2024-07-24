@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IpcService } from '../../services/ipc.service';
-import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-preload',
@@ -17,8 +16,7 @@ export class PreloadComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private ipcService: IpcService,
-    private dataService: DataService
+    private ipcService: IpcService
   ) {}
 
   ngOnInit(): void {
@@ -28,14 +26,11 @@ export class PreloadComponent implements OnInit {
       //Si existe algun usuario logueado...
       if(args !== false) {
         //Se guardan los datos del usuario en el sessionStorage
-        sessionStorage.setItem('user', JSON.stringify(args));
+        sessionStorage.setItem('userData', JSON.stringify(args));
         //Se redirige al Dashboard
         this.router.navigate(['/Dashboard']);
       //Si no existe ningun usuario logueado redirige al login
       }else this.router.navigate(['/Login']);
-    });
-    this.dataService.http({ code: '002' }).subscribe((resp: any) => {
-      console.log(resp);
     });
   }
 }

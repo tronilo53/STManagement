@@ -12,3 +12,6 @@
     bottom: 0;
     left: 1rem;
 }
+.__error {
+    border: 1px solid tomato;
+}

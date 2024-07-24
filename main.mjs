@@ -122,8 +122,15 @@ app.on( "window-all-closed", () => {
 /**
  * * Comunicación entre procesos
  */
+//Guarda los datos de inicio de sesion en el store
+ipcMain.on('setLogin', (event, args) => {
+    try {
+        store.set('loginData', args); 
+        event.sender.send('setLogin', '001');
+    }catch(error) { event.sender.send('setLogin', '002') }
+});
 //Obtiene los datos del usuario
-ipcMain.on('checkLogin', (event, args) => { event.sender.send('checkLogin', store.get('checkLogin', false)) });
+ipcMain.on('checkLogin', (event, args) => { event.sender.send('checkLogin', store.get('loginData', false)) });
 //Comprueba la bandera de que se ha instalado una nueva actualizacion
 ipcMain.on('checkChangeLog', (event, args) => { event.sender.send('checkChangeLog', store.get('changeLog', false)) });
 //Elimina del store la bandera de la instalacion de la nueva actualizacion

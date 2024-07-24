@@ -4,6 +4,7 @@ import { PreloadComponent } from './pages/preload/preload.component';
 import { DashboardComponent } from './pages/shared/dashboard/dashboard.component';
 import { HomeComponent } from './pages/others/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ProfileComponent } from './pages/others/profile/profile.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       { path: 'Home', component: HomeComponent },
+      { path: 'Profile', component: ProfileComponent },
       { path: '**', pathMatch: 'full', redirectTo: 'Home' }
     ]
   },

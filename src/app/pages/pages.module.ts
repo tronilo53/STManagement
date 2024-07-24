@@ -8,6 +8,8 @@ import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { HomeComponent } from './others/home/home.component';
 import { ComponentsModule } from '../components/components.module';
 import { LoginComponent } from './login/login.component';
+import { FormsModule } from '@angular/forms';
+import { ProfileComponent } from './others/profile/profile.component';
 
 
 
@@ -16,13 +18,15 @@ import { LoginComponent } from './login/login.component';
     PreloadComponent,
     DashboardComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     ComponentsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   exports: [
     PreloadComponent,

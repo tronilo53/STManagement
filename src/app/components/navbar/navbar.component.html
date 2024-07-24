@@ -9,29 +9,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" [routerLink]="['/Dashboard/Home']" routerLinkActive="active">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" [routerLink]="['/Dashboard/Stock']" routerLinkActive="active">Stock</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive() }">Gestiones</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Simulation']" routerLinkActive="active">Simulación</a></li>
+                        <li><a class="dropdown-item" href="#">Facturas</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" href="#">Datos Fiscales</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    <a class="nav-link" [routerLink]="['/Dashboard/Profile']" routerLinkActive="active" >Perfil</a>
                 </li>
             </ul>
             <form class="d-flex" role="search">
                 <!--!Se detectan los cambios con el Pipe 'async' si no, falla el avatar-->
-                <img class="avatar" [src]="'assets/avatars/' + (storageService.configBehavior | async)?.avatar" alt="avatar.png">
+                <img [ngClass]="{'avatar_default': storageService.getUserData().avatar === 'assets/avatars/default.png', 'avatar': storageService.getUserData().avatar !== 'assets/avatars/default.png'}" [src]="storageService.getUserData().avatar" alt="avatar.png">
                 <input class="form-control me-2" disabled type="text" placeholder="Buscar" aria-label="Search">
                 <button class="btn btn-outline-light disabled" type="button">Buscar</button>
             </form>

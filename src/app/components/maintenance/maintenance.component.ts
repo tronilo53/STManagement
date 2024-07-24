@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-maintenance',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class MaintenanceComponent {
 
+  constructor(public storageService: StorageService) {}
 }

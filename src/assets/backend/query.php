@@ -70,6 +70,7 @@
 									'nombre' => $rows['nombre'],
 									'nombre_usuario' => $rows['nombre_usuario'],
 									'avatar' => $rows['avatar'],
+									'tema' => $rows['tema'],
 									'tipo_usuario' => $rows['tipo_usuario']
 								]
 							];
@@ -81,14 +82,22 @@
 			//Si el usuario no existe...
 			}else $res = ['response' => '002'];
 		break;
-		//CAMBIO DE AVATAR
+		//CAMBIO DE AVATAR O TEMA
 		case '005':
-			//Actualiza el avatar
-			$stmt = $pdo -> prepare('UPDATE usuarios SET avatar = ? WHERE nombre_usuario = ?');
-			$stmt -> execute([ $params->data->avatar, $params->data->nombre_usuario ]);
-			//Si se actualiza el avatar correctamente...
+			//Si es avatar...
+			if($params->data->item === 'avatar') {
+				//Actualiza el avatar
+				$stmt = $pdo -> prepare('UPDATE usuarios SET avatar = ? WHERE nombre_usuario = ?');
+				$stmt -> execute([ $params->data->avatar, $params->data->nombre_usuario ]);
+			//Si es tema...
+			}else {
+				//Actualiza el tema
+				$stmt = $pdo -> prepare('UPDATE usuarios SET tema = ? WHERE nombre_usuario = ?');
+				$stmt -> execute([ $params->data->tema, $params->data->nombre_usuario ]);
+			}
+			//Si se actualiza correctamente...
 			if($stmt) $res = ['response' => '001'];
-			//Si no se actualiza el avavatar...
+			//Si no se actualiza...
 			else $res = ['response' => '002'];
 		break;
 	}
