@@ -1,4 +1,4 @@
-<nav [class]="'navbar navbar-expand-sm ' + storageService.getTheme()">
+<nav class="navbar navbar-expand-sm {{ storageService.getThemeCss('nav') }}">
     <div class="container-fluid">
         <a class="navbar-brand">
             <img class="logo" src="assets/icon.png" alt="icon.png">
@@ -30,8 +30,10 @@
                 </li>
             </ul>
             <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <!--!Se detectan los cambios con el Pipe 'async' si no, falla el avatar-->
+                <img class="avatar" [src]="'assets/avatars/' + (storageService.configBehavior | async)?.avatar" alt="avatar.png">
+                <input class="form-control me-2" disabled type="text" placeholder="Buscar" aria-label="Search">
+                <button class="btn btn-outline-light disabled" type="button">Buscar</button>
             </form>
         </div>
     </div>

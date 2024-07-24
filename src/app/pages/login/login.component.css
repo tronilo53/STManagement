@@ -1,0 +1,14 @@
+.login {
+    font-family: 'Ubuntu';
+}
+.title {
+    font-family: 'Righteous';
+}
+.logo {
+    width: 12rem;
+}
+.copy {
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+}

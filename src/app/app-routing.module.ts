@@ -3,9 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { PreloadComponent } from './pages/preload/preload.component';
 import { DashboardComponent } from './pages/shared/dashboard/dashboard.component';
 import { HomeComponent } from './pages/others/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
+  { path: 'Login', component: LoginComponent },
   { 
     path: 'Dashboard', 
     component: DashboardComponent,
@@ -14,7 +16,7 @@ const routes: Routes = [
       { path: '**', pathMatch: 'full', redirectTo: 'Home' }
     ]
   },
-  { path: '**', pathMatch: 'full', redirectTo: 'Dashboard' }
+  { path: '**', pathMatch: 'full', redirectTo: 'Preload' }
 ];
 
 @NgModule({

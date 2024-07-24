@@ -1,9 +1,15 @@
+.preload {
+    font-family: 'Ubuntu';
+}
 .icon {
-    width: 8rem;
+    width: 10rem;
     text-align: center;
 }
 .title {
     font-family: 'Righteous';
+}
+.subtitle {
+    letter-spacing: 2px;
 }
 .spinner-grow {
     width: 1rem;
@@ -11,7 +17,7 @@
     margin: 0 3px;
 }
 .copy {
-    margin-left: 1rem;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
 }

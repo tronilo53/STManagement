@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+
 import { PreloadComponent } from './preload/preload.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
-import { RouterModule } from '@angular/router';
 import { HomeComponent } from './others/home/home.component';
 import { ComponentsModule } from '../components/components.module';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -12,16 +15,20 @@ import { ComponentsModule } from '../components/components.module';
   declarations: [
     PreloadComponent,
     DashboardComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    ComponentsModule
+    ComponentsModule,
+    HttpClientModule
   ],
   exports: [
     PreloadComponent,
-    DashboardComponent
+    DashboardComponent,
+    HomeComponent,
+    LoginComponent
   ]
 })
 export class PagesModule { }

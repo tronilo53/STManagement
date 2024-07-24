@@ -12,9 +12,6 @@ const { autoUpdater } = pkg;
 const store = new Store();
 const __dirname = path.resolve();
 
-const URL_PRELOAD = process.platform === 'darwin' ? 
-(isDev ? 'http://localhost:4200/#/Preload' : `file://${path.join(process.resourcesPath, 'app', 'dist', app.name, 'browser', 'index.html#', 'Preload')}`) : 
-(isDev ? 'http://localhost:4200/#/Preload' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'browser', 'index.html#', 'Preload')}`);
 const URL_HOME = process.platform === 'darwin' ? 
 (isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app', 'dist', app.name, 'browser', 'index.html')}`) : 
 (isDev ? 'http://localhost:4200/' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'browser', 'index.html')}`);
@@ -30,7 +27,7 @@ const ICON = process.platform === 'darwin' ?
 const ICON_NATIVE = nativeImage.createFromPath(ICON);
 const MENU_TEMPLATE = isDev ? [
     {
-        label: app.name,
+        label: process.platform === 'darwin' ? app.name : 'Archivo',
         submenu: [
             { role: 'toggledevtools' },
             { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
@@ -38,7 +35,7 @@ const MENU_TEMPLATE = isDev ? [
     }
 ] : [
     {
-        label: app.name,
+        label: process.platform === 'darwin' ? app.name : 'Archivo',
         submenu: [
             { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
         ]
@@ -56,48 +53,12 @@ autoUpdater.autoRunAppAfterInstall = true;
  * * Declaraciones de Variables
  */
 let appWin;
-let appPreload;
 let tray = null;
 
 /**
- * * Función de ventana Preload
- */
-function appInit() {
-    //Instancia de una nueva ventana
-    appPreload = new BrowserWindow(
-        {
-            width: 600, 
-            height: 400,
-            resizable: false,
-            x: Math.round( (screen.getPrimaryDisplay().workAreaSize.width - 600) / 2 ),
-            y: Math.round( (screen.getPrimaryDisplay().workAreaSize.height - 400) / 2 ),
-            webPreferences: { 
-                contextIsolation: false, 
-                nodeIntegration: true
-            },
-            frame: false,
-            transparent: false,
-            alwaysOnTop: false,
-            icon: ICON_NATIVE
-        }
-    );
-    appPreload.loadURL(URL_PRELOAD);
-    //Cuando la ventana está lista para ser mostrada...
-    appPreload.once( "ready-to-show", () => {
-        setTimeout(() => {
-            //Cierra la ventana de Preload
-            appPreload.close();
-            //Crea la ventana principal
-            createHome();
-        }, 3000);
-    });
-    //Cuando se llama a .close() la ventana Preload se cierra
-    appPreload.on( "closed", () => appPreload = null );
-}
-/**
  * * Función de ventana principal
  */
-function createHome() {
+function appInit() {
     //Instancia para una nueva ventana
     appWin = new BrowserWindow(
         { 
@@ -161,13 +122,8 @@ app.on( "window-all-closed", () => {
 /**
  * * Comunicación entre procesos
  */
-//Guarda los datos de configuración de la App
-ipcMain.on('setConfig', (event, args) => {
-    try { store.set('config', args); event.sender.send('setConfig', '001'); }
-    catch(error) { event.sender.send('setConfig', '002') }
-});
-//comprueba si existe configuracion guardada
-ipcMain.on('getConfig', (event, args) => { event.sender.send('getConfig', store.get('config', false)) });
+//Obtiene los datos del usuario
+ipcMain.on('checkLogin', (event, args) => { event.sender.send('checkLogin', store.get('checkLogin', false)) });
 //Comprueba la bandera de que se ha instalado una nueva actualizacion
 ipcMain.on('checkChangeLog', (event, args) => { event.sender.send('checkChangeLog', store.get('changeLog', false)) });
 //Elimina del store la bandera de la instalacion de la nueva actualizacion
