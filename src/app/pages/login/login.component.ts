@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ControllerService } from '../../services/controller.service';
 import { DataService } from '../../services/data.service';
 import { IpcService } from '../../services/ipc.service';
@@ -9,30 +9,26 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   /**
    * *Propiedades
    */
   @ViewChild('nombre_usuario') nombre_usuario: ElementRef;
   @ViewChild('clave') clave: ElementRef;
+  @ViewChild('icon') icon: ElementRef;
   private year: number = new Date().getFullYear();
   public data: any = { nombre_usuario: '', clave: '' };
   public remember: boolean = false;
-  public typePass: string = 'password';
-  public iconPass: string = 'visibility';
 
   constructor(
     private renderer: Renderer2,
     private controllerService: ControllerService,
     private dataService: DataService,
     private ipcService: IpcService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
-
-  ngOnInit(): void {
-    
-  }
 
   /**
    * *Function: Obtiene el Año actual
@@ -44,12 +40,12 @@ export class LoginComponent implements OnInit {
    * *Function: Muestra/Oculta la contraseña
    */
   public showPass(): void {
-    if(this.iconPass === 'visibility' && this.typePass === 'password') {
-      this.iconPass = 'visibility_off';
-      this.typePass = 'text';
+    if(this.icon.nativeElement.innerHTML === 'visibility') {
+      this.renderer.setProperty(this.clave.nativeElement, 'type', 'text');
+      this.renderer.setProperty(this.icon.nativeElement, 'innerHTML', 'visibility_off');
     }else {
-      this.iconPass = 'visibility';
-      this.typePass = 'password';
+      this.renderer.setProperty(this.clave.nativeElement, 'type', 'password');
+      this.renderer.setProperty(this.icon.nativeElement, 'innerHTML', 'visibility');
     }
   }
 
@@ -106,30 +102,20 @@ export class LoginComponent implements OnInit {
         this.controllerService.alert('info', 'Error: 004[004] La cuenta que hace referencia está deshabilitada y no se puede usar');
       //si todo está bien...
       }else {
-        //Se oculta el loading
-        this.controllerService.stop_loading();
-        //Si está marcado 'recordar cuenta'...
-        if(this.remember) {
-          //IPC para guardar los datos de sesión
-          this.ipcService.send('setLogin', resp.data);
-          this.ipcService.once('setLogin', (event, args) => {
-            //si los datos no se guardan se muestra una alerta...
-            if(args === '002') this.controllerService.alert('error', 'ERROR: [IPCSetLogin] Ha habido un error interno. Por favor, inténtelo de nuevo mas tarde');
-            //Si se guardan los datos correctamente...
-            else {
-              //Se guardan los datos en el sessionStorage
-              sessionStorage.setItem('userData', JSON.stringify(resp.data));
-              //Se redirige al 'Dashboard'
-              this.router.navigate(['/Dashboard']);
-            }
-          });
-        //Si no está marcado 'recordar cuenta'...
-        }else {
-          //Se guardan los datos en el sessionStorage
-          sessionStorage.setItem('userData', JSON.stringify(resp.data));
-          //Se redirige al 'Dashboard'
-          this.router.navigate(['/Dashboard']);
-        }
+        //Se guardan los datos en el sessionStorage
+        sessionStorage.setItem('userData', JSON.stringify(resp.data));
+        //IPC para obtener la version de la app
+        this.ipcService.send('getVersion');
+        this.ipcService.once('getVersion', (event, args) => {
+          //se guarda la version en el sessionStorage
+          sessionStorage.setItem('version', args);
+          //Si está marcado 'recordar cuenta' se guardan los datos en el store
+          if(this.remember) this.ipcService.send('setLogin', this.data);
+          //Se oculta el loading
+          this.controllerService.stop_loading();
+          //Redirige a Dashboard detectando la zona de angular
+          this.ngZone.run(() => { this.router.navigate(['/Dashboard']) });
+        });
       }
     });
   }

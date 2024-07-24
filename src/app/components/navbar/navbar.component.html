@@ -26,6 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/Dashboard/Profile']" routerLinkActive="active" >Perfil</a>
                 </li>
+                <button type="button" class="btn btn-outline-danger" style="margin-left: 1rem;" (click)="logout()">Cerrar Sesión</button>
             </ul>
             <form class="d-flex" role="search">
                 <!--!Se detectan los cambios con el Pipe 'async' si no, falla el avatar-->

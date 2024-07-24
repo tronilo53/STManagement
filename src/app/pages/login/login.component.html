@@ -28,7 +28,7 @@
                     <div class="input-group mb-3">
                         <div class="form-floating">
                             <input 
-                            [type]="typePass" 
+                            type="password" 
                             id="floatingInput2" 
                             name="clave" 
                             class="form-control" 
@@ -39,7 +39,7 @@
                             <label for="floatingInput2">Contraseña</label>
                         </div>
                         <button type="button" class="btn btn-outline-secondary" id="button-addon2" (click)="showPass()">
-                            <span class="material-symbols-outlined" style="vertical-align: middle;">{{ iconPass }}</span>
+                            <span class="material-symbols-outlined" style="vertical-align: middle;" #icon>visibility</span>
                         </button>
                     </div>
                     <div class="mb-3">

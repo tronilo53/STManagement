@@ -80,11 +80,11 @@ function appInit() {
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
         //UPDATES DE PRUEBA
-        /*if(isDev) {
+        if(isDev) {
             const devUpdateConfigPath = path.join(__dirname, 'dev-app-update.yml');
             autoUpdater.updateConfigPath = devUpdateConfigPath;
             autoUpdater.forceDevUpdateConfig = true; 
-        }*/
+        }
         //Pone a la escucha la comprobación de actualizaciones
         autoUpdater.checkForUpdatesAndNotify();
         //Pone a la escucha los eventos de actualizaciones
@@ -113,24 +113,19 @@ app.whenReady().then( () => {
 });
 
 /**
- * * Acciones para cerrar la App en MacOs
+ * * Acciones para cerrar la App
  */
-app.on( "window-all-closed", () => {
-    app.quit();
-});
+app.on( "window-all-closed", () => { app.quit() });
 
 /**
  * * Comunicación entre procesos
  */
 //Guarda los datos de inicio de sesion en el store
-ipcMain.on('setLogin', (event, args) => {
-    try {
-        store.set('loginData', args); 
-        event.sender.send('setLogin', '001');
-    }catch(error) { event.sender.send('setLogin', '002') }
-});
+ipcMain.on('setLogin', (event, args) => { store.set('loginData', args) });
 //Obtiene los datos del usuario
 ipcMain.on('checkLogin', (event, args) => { event.sender.send('checkLogin', store.get('loginData', false)) });
+//Elimina del store el login guardado
+ipcMain.on('deleteLogin', (event, args) => { store.delete('loginData') });
 //Comprueba la bandera de que se ha instalado una nueva actualizacion
 ipcMain.on('checkChangeLog', (event, args) => { event.sender.send('checkChangeLog', store.get('changeLog', false)) });
 //Elimina del store la bandera de la instalacion de la nueva actualizacion
