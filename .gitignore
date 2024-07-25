@@ -2,7 +2,7 @@
 
 # Compiled output
 /dist
-/release
+/dist_electron
 /tmp
 /out-tsc
 /bazel-out
