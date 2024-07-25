@@ -1,76 +1,4 @@
 {
-  "build": {
-    "copyright": "Luis Tronilo dev STManagement.",
-    "directories": {
-      "output": "release",
-      "buildResources": "build"
-    },
-    "files": [
-      "**/*",
-      "dist/**/*",
-      "build/**/*"
-    ],
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.ico",
-      "publish": {
-        "provider": "github",
-        "owner": "tronilo53",
-        "repo": "STManagement",
-        "private": true,
-        "releaseType": "release"
-      }
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "build/icon.icns",
-      "publish": {
-        "provider": "github",
-        "owner": "tronilo53",
-        "repo": "STManagement",
-        "private": true,
-        "releaseType": "release"
-      }
-    },
-    "asar": false,
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "removeDefaultUninstallWelcomePage": false,
-      "installerIcon": "build/installerIcon.ico",
-      "uninstallerIcon": "build/uninstallerIcon.ico",
-      "installerHeaderIcon": "build/installerHeaderIcon.ico",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "menuCategory": false,
-      "shortcutName": "STManagement",
-      "runAfterFinish": false,
-      "include": "build/customInstaller.nsh"
-    },
-    "dmg": {
-      "icon": "build/icon.icns",
-      "background": "build/background.png",
-      "iconSize": 80,
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "width": 540,
-        "height": 380
-      }
-    }
-  },
   "name": "STManagement",
   "version": "1.0.0",
   "main": "main.mjs",
@@ -80,9 +8,11 @@
   "author": "Luis TM - STManagement",
   "scripts": {
     "ng": "ng",
-    "start": "electron .",
-    "build": "ng build && electron-builder",
-    "build:p": "ng build && electron-builder --publish always"
+    "start": "ng serve",
+    "build": "ng build",
+    "electron": "electron .",
+    "electron-build": "ng build && electron-builder",
+    "publish": "ng build && electron-builder --publish always"
   },
   "private": true,
   "dependencies": {
@@ -121,5 +51,71 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.3.2"
+  },
+  "build": {
+    "appId": "com.es.rivendel",
+    "productName": "STManagement",
+    "copyright": "Luis Tronilo dev STManagement.",
+    "files": [
+      "**/*",
+      "dist/**/*",
+      "build/**/*"
+    ],
+    "directories": {
+      "output": "dist_electron",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "asar": false,
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "removeDefaultUninstallWelcomePage": false,
+      "installerIcon": "build/installerIcon.ico",
+      "uninstallerIcon": "build/uninstallerIcon.ico",
+      "installerHeaderIcon": "build/installerHeaderIcon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "menuCategory": false,
+      "shortcutName": "STManagement",
+      "runAfterFinish": false,
+      "include": "build/customInstaller.nsh"
+    },
+    "dmg": {
+      "icon": "build/icon.icns",
+      "background": "build/background.png",
+      "iconSize": 80,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "tronilo53",
+      "repo": "STManagement",
+      "private": false
+    }
   }
 }

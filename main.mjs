@@ -80,11 +80,10 @@ function appInit() {
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
         //UPDATES DE PRUEBA
-        if(isDev) {
-            const devUpdateConfigPath = path.join(__dirname, 'dev-app-update.yml');
-            autoUpdater.updateConfigPath = devUpdateConfigPath;
+        /*if(isDev) {
+            autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
             autoUpdater.forceDevUpdateConfig = true; 
-        }
+        }*/
         //Pone a la escucha la comprobación de actualizaciones
         autoUpdater.checkForUpdatesAndNotify();
         //Pone a la escucha los eventos de actualizaciones

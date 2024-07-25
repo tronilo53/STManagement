@@ -1,0 +1,38 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Angular application
+      run: npm run build
+
+    - name: Build Electron application
+      run: npm run electron-build
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    - name: Publish Electron application
+      run: npm run publish
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
