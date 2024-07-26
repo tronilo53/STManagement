@@ -32,16 +32,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag v$VERSION
-          git push https://$GITHUB_TOKEN@github.com/tronilo53/STManagement.git v$VERSION
-
       - name: Build and Package Electron App
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
