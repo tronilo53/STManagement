@@ -32,17 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Check Versions
-        run: |
-          node -v
-          npm -v
-          npx electron --version
-          npx electron-builder --version
-
       - name: Build and Package Electron App
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
         run: |
           npm run build
-          DEBUG=electron-builder npm run build
