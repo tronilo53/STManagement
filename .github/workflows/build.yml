@@ -36,9 +36,10 @@ jobs:
         id: tag_version
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" > $GITHUB_ENV
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag v$VERSION
-          git push origin v$VERSION
+          git push https://$GITHUB_TOKEN@github.com/tronilo53/STManagement.git v$VERSION
 
       - name: Build and Package Electron App
         env:
