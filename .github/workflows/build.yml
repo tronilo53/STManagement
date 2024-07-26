@@ -1,4 +1,4 @@
-name: Build and Publish
+name: CI Build and Release
 
 on:
   push:
@@ -7,32 +7,32 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Build Angular application
-      run: npm run build
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build Electron application
-      run: npm run electron-build
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-    - name: Publish Electron application
-      run: npm run publish
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Build and Package Electron App
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run build

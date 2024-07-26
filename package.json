@@ -9,10 +9,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "electron": "electron .",
-    "electron-build": "ng build && electron-builder",
-    "publish": "ng build && electron-builder --publish always"
+    "build": "ng build --prod && electron-builder --publish always",
+    "electron": "electron ."
   },
   "private": true,
   "dependencies": {
@@ -111,11 +109,10 @@
         "height": 380
       }
     },
-    "publish": {
-      "provider": "github",
-      "owner": "tronilo53",
-      "repo": "STManagement",
-      "private": false
-    }
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ]
   }
 }
