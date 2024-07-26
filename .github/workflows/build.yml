@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository

@@ -70,6 +70,8 @@
     "mac": {
       "target": "dmg",
       "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
       "icon": "build/icon.icns"
     },
     "asar": false,

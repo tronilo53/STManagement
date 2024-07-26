@@ -13,8 +13,8 @@ const store = new Store();
 const __dirname = path.resolve();
 
 const URL_HOME = process.platform === 'darwin' ? 
-(isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app', 'dist', app.name, 'browser', 'index.html')}`) : 
-(isDev ? 'http://localhost:4200/' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'browser', 'index.html')}`);
+(isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app', 'dist', 'stmanagement', 'browser', 'index.html')}`) : 
+(isDev ? 'http://localhost:4200/' : `file://${path.join(__dirname, 'resources', 'app', 'dist', 'stmanagement', 'browser', 'index.html')}`);
 const ASSETS = process.platform === 'darwin' ?
 (isDev ? path.join(__dirname, 'src', 'assets') : path.join(process.resourcesPath, 'app', 'src', 'assets')) :
 (isDev ? path.join(__dirname, 'src', 'assets') : path.join(__dirname, 'resources', 'app', 'src', 'assets'));
