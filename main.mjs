@@ -15,7 +15,7 @@ const __dirname = path.resolve();
 const URL_HOME = isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'stmanagement', 'browser', 'index.html')}`;
 const ASSETS = isDev ? path.join(__dirname, 'src', 'assets') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets');
 const CHANGELOG = isDev ? path.join(__dirname, 'CHANGELOG.md') : path.join(process.resourcesPath, 'app.asar', 'CHANGELOG.md');
-const ICON = isDev ? path.join(__dirname, 'src', 'assets', 'icon.icns') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets', 'icon.icn');
+const ICON = isDev ? path.join(__dirname, 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png');
 const ICON_NATIVE = nativeImage.createFromPath(ICON);
 const MENU_TEMPLATE = isDev ? [
     {
