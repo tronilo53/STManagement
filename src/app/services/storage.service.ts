@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface UserData { nombre: string; nombre_usuario: string; avatar: string; tema: string; tipo_usuario: string; }
+interface Data { version: string; changelog: string; }
 
 @Injectable({
   providedIn: 'root'
@@ -53,10 +54,10 @@ export class StorageService {
   public getThemes(): string[] { return this.themes }
 
   /**
-   * *Function: Obtiene la version de la App
-   * @returns Devuelve la version en tipo String
+   * *Function: Obtiene la version de la app y el CHANGELOG
+   * @returns Devuelve un Objeto de tipo Data
    */
-  public getVersion(): string { return sessionStorage.getItem('version') }
+  public getData(): Data { return { version: sessionStorage.getItem('version'), changelog: sessionStorage.getItem('changeLog') } }
 
   /**
    * *Function: Obtiene la/s clases css que se deben aplicar

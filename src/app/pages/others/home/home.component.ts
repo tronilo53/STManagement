@@ -29,10 +29,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     //IPC Para comprobar si se ha instalado una actualización
     this.ipcService.send('checkChangeLog');
-    this.ipcService.once('checkChangeLog', (event, args) => {
-      //Si se ha instalado una actualización...
-      if(args != false) this.router.navigate(['/ChangeLog']);
-    });
+    this.ipcService.once('checkChangeLog', (event, args) => { if(args != false) this.router.navigate(['/ChangeLog']) });
   }
   ngAfterViewInit(): void {
     //Escucha si está comprobando actualizaciones

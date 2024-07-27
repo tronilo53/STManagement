@@ -109,12 +109,18 @@ export class LoginComponent {
         this.ipcService.once('getVersion', (event, args) => {
           //se guarda la version en el sessionStorage
           sessionStorage.setItem('version', args);
-          //Si está marcado 'recordar cuenta' se guardan los datos en el store
-          if(this.remember) this.ipcService.send('setLogin', this.data);
-          //Se oculta el loading
-          this.controllerService.stop_loading();
-          //Redirige a Dashboard detectando la zona de angular
-          this.ngZone.run(() => { this.router.navigate(['/Dashboard']) });
+          //IPC para obtener los datos del CHANGELOG
+          this.ipcService.send('getChangeLog');
+          this.ipcService.once('getChangeLog', (event, args) => {
+            //Se guardan los datos de CHANGELOG en el sessionStorage
+            sessionStorage.setItem('changeLog', args);
+            //Si está marcado 'recordar cuenta' se guardan los datos en el store
+            if(this.remember) this.ipcService.send('setLogin', this.data);
+            //Se oculta el loading
+            this.controllerService.stop_loading();
+            //Redirige a Dashboard detectando la zona de angular
+            this.ngZone.run(() => { this.router.navigate(['/Dashboard']) });
+          });
         });
       }
     });

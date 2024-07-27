@@ -120,15 +120,9 @@ ipcMain.on('deleteLogin', (event, args) => { store.delete('loginData') });
 //Comprueba la bandera de que se ha instalado una nueva actualizacion
 ipcMain.on('checkChangeLog', (event, args) => { event.sender.send('checkChangeLog', store.get('changeLog', false)) });
 //Elimina del store la bandera de la instalacion de la nueva actualizacion
-ipcMain.on('deleteChangeLog', (event, args) => {
-    try { store.delete('changeLog'); event.sender.send('deleteChangeLog', '001'); } 
-    catch (error) { event.sender.send('deleteChangeLog', '002'); }
-});
+ipcMain.on('deleteChangeLog', (event, args) => { store.delete('changeLog'); });
 //Obtiene la info del fichero CHANGELOG.md
-ipcMain.on('getChangeLog', (event, args) => {
-    const path = isDev ? PATH_CHANGELOG_DEV : PATH_CHANGELOG_PROD;
-    fs.readFile(path, 'utf8', (err, data) => { event.sender.send('getChangeLog', data) });
-});
+ipcMain.on('getChangeLog', (event, args) => { fs.readFile(CHANGELOG, 'utf8', (err, data) => { event.sender.send('getChangeLog', data) }) });
 
 //CERRAR APLICACIÓN
 ipcMain.on( 'closeApp', ( event, args ) => app.quit());

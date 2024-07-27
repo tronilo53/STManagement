@@ -9,9 +9,11 @@ import { StockComponent } from './pages/others/stock/stock.component';
 import { SimulationComponent } from './pages/admin/simulation/simulation.component';
 import { TaxsComponent } from './pages/admin/taxs/taxs.component';
 import { OrdersComponent } from './pages/admin/orders/orders.component';
+import { ChangelogComponent } from './pages/changelog/changelog.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
+  { path: 'ChangeLog', component: ChangelogComponent },
   { path: 'Login', component: LoginComponent },
   { 
     path: 'Dashboard', 

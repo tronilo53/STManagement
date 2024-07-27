@@ -72,35 +72,22 @@ export class ProfileComponent implements OnInit {
         this.controllerService.loading('Espere...');
         //Se crea un nuevo Objeto con el nuevo avatar
         const data: UserData = {...this.storageService.getUserData(), avatar: this.avatarSelect};
-        //Se creo un nuevo objeto para enviarlo
+        //Se crea un nuevo objeto para enviarlo
         const dataSend: any = {avatar: data.avatar, nombre_usuario: data.nombre_usuario, item: 'avatar'};
         //Peticion para cambiar el avatar del usuario
         this.dataService.http({ code: '005', data: dataSend }).subscribe((resp: any) => {
           //Si se actualiza el avatar...
           if(resp.response === '001') {
-            //IPC para guardar los datos de configuracion en el store
-            this.ipcService.send('setLogin', data);
-            this.ipcService.once('setLogin', (event, args) => {
-              //Si se guardan los datos correctamente...
-              if(args === '001') {
-                //Se modifica la configuración en el sessionStorage y en el Behavior
-                this.storageService.setUserData(data);
-                //Se restablece el avatar
-                this.avatarSelect = null;
-                //Se oculta el loading
-                this.controllerService.stop_loading();
-                //Se muestra una notificación
-                this.controllerService.toast('top-end', 'success', 'Avatar Actualizado!');
-                //Se detectan los cambios en la vista
-                this.cp.detectChanges();
-              //Si los datos no se guardan correctamente...
-              }else {
-                //Se oculta el loading
-                this.controllerService.stop_loading();
-                //Se muestra una alerta
-                this.controllerService.alert('error', 'No se han guardardado los datos de Configuración');
-              }
-            });
+            //se guardan los nuevos datos en el sessionStorage y en el Behavior
+            this.storageService.setUserData(data);
+            //Se restablece el avatar
+            this.avatarSelect = null;
+            //Se oculta el loading
+            this.controllerService.stop_loading();
+            //Se muestra una notificación
+            this.controllerService.toast('top-end', 'success', 'Avatar Actualizado!');
+            //Se detectan los cambios en la vista
+            this.cp.detectChanges();
           //Si no se actualiza el avatar...
           }else {
             //Se oculta el loading
@@ -131,29 +118,16 @@ export class ProfileComponent implements OnInit {
       this.dataService.http({ code: '005', data: dataSend }).subscribe((resp: any) => {
         //Si se actualiza el tema...
         if(resp.response === '001') {
-          //IPC para guardar los datos de configuracion en el store
-          this.ipcService.send('setLogin', data);
-          this.ipcService.once('setLogin', (event, args) => {
-            //Si se guardan los datos correctamente...
-            if(args === '001') {
-              //Se guarda la configuracion en el sessionStorage y en el Behavior
-              this.storageService.setUserData(data);
-              //Se restablece el tema con el aplicado
-              this.selectedTheme = this.storageService.getUserData().tema;
-              //Se oculta el loading
-              this.controllerService.stop_loading();
-              //Se muestra una notificación
-              this.controllerService.toast('top-end', 'success', 'Tema Actualizado!');
-              //Se detectan los cambios en la vista
-              this.cp.detectChanges();
-            //Si los datos no se guardan correctamente...
-            }else {
-              //Se oculta el loading
-              this.controllerService.stop_loading();
-              //Se muestra una alerta
-              this.controllerService.alert('error', 'No se han guardardado los datos de Configuración');
-            }
-          });
+          //Se guarda la configuracion en el sessionStorage y en el Behavior
+          this.storageService.setUserData(data);
+          //Se restablece el tema con el aplicado
+          this.selectedTheme = this.storageService.getUserData().tema;
+          //Se oculta el loading
+          this.controllerService.stop_loading();
+          //Se muestra una notificación
+          this.controllerService.toast('top-end', 'success', 'Tema Actualizado!');
+          //Se detectan los cambios en la vista
+          this.cp.detectChanges();
         //Si no se actualiza el tema...
         }else {
           //Se oculta el loading

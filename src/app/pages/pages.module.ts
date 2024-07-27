@@ -14,6 +14,7 @@ import { StockComponent } from './others/stock/stock.component';
 import { SimulationComponent } from './admin/simulation/simulation.component';
 import { TaxsComponent } from './admin/taxs/taxs.component';
 import { OrdersComponent } from './admin/orders/orders.component';
+import { ChangelogComponent } from './changelog/changelog.component';
 
 
 
@@ -27,7 +28,8 @@ import { OrdersComponent } from './admin/orders/orders.component';
     StockComponent,
     SimulationComponent,
     TaxsComponent,
-    OrdersComponent
+    OrdersComponent,
+    ChangelogComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { OrdersComponent } from './admin/orders/orders.component';
     StockComponent,
     SimulationComponent,
     TaxsComponent,
-    OrdersComponent
+    OrdersComponent,
+    ChangelogComponent
   ]
 })
 export class PagesModule { }
