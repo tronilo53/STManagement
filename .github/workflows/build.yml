@@ -6,11 +6,8 @@ on:
       - main
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  build-macos:
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
@@ -32,8 +29,61 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build and Package Electron App
+      - name: Import Apple Certificate
+        env:
+          CERTIFICATE: ${{ secrets.MAC_CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$CERTIFICATE" | base64 --decode -o /tmp/certificate.p12
+          security create-keychain -p actions build.keychain
+          security import /tmp/certificate.p12 -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -s ~/Library/Keychains/build.keychain
+          security unlock-keychain -p actions ~/Library/Keychains/build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k actions ~/Library/Keychains/build.keychain
+
+      - name: Check Versions
+        run: |
+          node -v
+          npm -v
+          npx electron --version
+          npx electron-builder --version
+
+      - name: Build and Package Electron App for macOS
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run build:mac
+  
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.11.0'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check Versions
         run: |
-          npm run build
+          node -v
+          npm -v
+          npx electron --version
+          npx electron-builder --version
+
+      - name: Build and Package Electron App for Windows
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run build:win

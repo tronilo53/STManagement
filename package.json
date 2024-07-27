@@ -9,7 +9,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production && electron-builder --publish always",
+    "build": "ng build --configuration production",
+    "build:mac": "npm run build && electron-builder --mac --publish always",
+    "build:win": "npm run build && electron-builder --win --publish always",
     "build:dev": "ng build && electron-builder",
     "electron": "electron ."
   },
@@ -71,7 +73,7 @@
     },
     "mac": {
       "target": "dmg",
-      "identity": null,
+      "identity": "STManagement",
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
       "icon": "build/icon.icns"
