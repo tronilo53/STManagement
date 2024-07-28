@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, NgZone, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
 import { ControllerService } from '../../services/controller.service';
 import { DataService } from '../../services/data.service';
 import { IpcService } from '../../services/ipc.service';
@@ -19,7 +19,6 @@ export class LoginComponent {
   @ViewChild('icon') icon: ElementRef;
   private year: number = new Date().getFullYear();
   public data: any = { nombre_usuario: '', clave: '' };
-  public remember: boolean = false;
 
   constructor(
     private renderer: Renderer2,
@@ -102,32 +101,10 @@ export class LoginComponent {
         this.controllerService.alert('info', 'Error: 004[004] La cuenta que hace referencia está deshabilitada y no se puede usar');
       //si todo está bien...
       }else {
-        //Se guardan los datos en el sessionStorage
-        sessionStorage.setItem('userData', JSON.stringify(resp.data));
-        //IPC para obtener la version de la app
-        this.ipcService.send('getVersion');
-        this.ipcService.once('getVersion', (event, args) => {
-          //se guarda la version en el sessionStorage
-          sessionStorage.setItem('version', args);
-          //IPC para obtener los datos del CHANGELOG
-          this.ipcService.send('getChangeLog');
-          this.ipcService.once('getChangeLog', (event, args) => {
-            //Se guardan los datos de CHANGELOG en el sessionStorage
-            sessionStorage.setItem('changeLog', args);
-            //Si está marcado 'recordar cuenta'...
-            if(this.remember) {
-              //Se guardan los datos en el store
-              this.ipcService.send('setLogin', this.data);
-              this.ipcService.removeAllListeners('setLogin');
-            }
-            //Guarda la bandera de flagUpdate en 'false' para que muestre si hay updates
-            sessionStorage.setItem('flagUpdate', 'false');
-            //Se oculta el loading
-            this.controllerService.stop_loading();
-            //Redirige a Dashboard detectando la zona de angular
-            this.ngZone.run(() => { this.router.navigate(['/Dashboard']) });
-          });
-        });
+        //Se oculta el loading
+        this.controllerService.stop_loading();
+        //IPC para mostrar la ventana principal
+        this.ipcService.send('loginSuccess', { userData: resp.data, loginData: this.data });
       }
     });
   }

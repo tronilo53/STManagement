@@ -2,14 +2,14 @@
     font-family: 'Ubuntu';
 }
 .icon {
-    width: 10rem;
+    width: 5rem;
     text-align: center;
 }
 .title {
     font-family: 'Righteous';
 }
 .subtitle {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 .spinner-grow {
     width: 1rem;

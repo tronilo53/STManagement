@@ -1,6 +1,6 @@
 {
   "name": "STManagement",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "main.mjs",
   "type": "module",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "electron-updater": "^6.2.1",
     "jquery": "^3.7.1",
     "material-symbols": "^0.21.2",
+    "node-fetch": "^3.3.2",
     "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.12.3",

@@ -10,6 +10,7 @@ import { SimulationComponent } from './pages/admin/simulation/simulation.compone
 import { TaxsComponent } from './pages/admin/taxs/taxs.component';
 import { OrdersComponent } from './pages/admin/orders/orders.component';
 import { ChangelogComponent } from './pages/changelog/changelog.component';
+import { DataGuard } from './guards/data.guard';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'Login', component: LoginComponent },
   { 
     path: 'Dashboard', 
+    canActivate: [DataGuard],
     component: DashboardComponent,
     children: [
       { path: 'Home', component: HomeComponent },
@@ -28,7 +30,7 @@ const routes: Routes = [
       { path: '**', pathMatch: 'full', redirectTo: 'Home' }
     ]
   },
-  { path: '**', pathMatch: 'full', redirectTo: 'Preload' }
+  { path: '**', pathMatch: 'full', redirectTo: 'Dashboard' }
 ];
 
 @NgModule({
