@@ -38,11 +38,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
     //Escucha si hay una actualización disponible
     this.ipcService.on('update_available', (event, data) => {
+      this.controllerService.stop_loading();
       this.update_available(data);
     });
     //Escucha si no hay ninguna actualización disponible
     this.ipcService.on('update_not_available', (event, data) => {
-      if(Swal) this.controllerService.stop_loading();
+      this.controllerService.stop_loading();
     });
     //Escucha el progreso de la descarga
     this.ipcService.on('download_progress', (event, progressObj) => {
