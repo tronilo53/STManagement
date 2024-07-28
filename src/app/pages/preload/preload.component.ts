@@ -45,6 +45,8 @@ export class PreloadComponent implements AfterViewInit {
             this.ipcService.once('getVersion', (event, args) => {
               //se guarda la version en el sessionStorage
               sessionStorage.setItem('version', args);
+              //Guarda la bandera de flagUpdate en 'false' para que muestre si hay updates
+              sessionStorage.setItem('flagUpdate', 'false');
               //Redirige al Dashboard detectando la zona de angular
               this.ngZone.run(() => { this.router.navigate(['/Dashboard']) });
             });

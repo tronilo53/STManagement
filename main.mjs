@@ -22,7 +22,7 @@ const MENU_TEMPLATE = isDev ? [
         label: process.platform === 'darwin' ? app.name : 'Archivo',
         submenu: [
             { role: 'toggledevtools' },
-            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
+            { label: 'Comprobar Actualizaciones', click: () => checkUpdates(true) }
         ]
     }
 ] : [
@@ -40,6 +40,7 @@ const MENU = Menu.buildFromTemplate( MENU_TEMPLATE );
  */
 autoUpdater.autoDownload = false;
 autoUpdater.autoRunAppAfterInstall = true;
+autoUpdater.setMaxListeners(20);
 
 /**
  * * Declaraciones de Variables
@@ -72,14 +73,10 @@ function appInit() {
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
         //UPDATES DE PRUEBA
-        /*if(isDev) {
+        if(isDev) {
             autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
             autoUpdater.forceDevUpdateConfig = true; 
-        }*/
-        //Pone a la escucha la comprobación de actualizaciones
-        autoUpdater.checkForUpdatesAndNotify();
-        //Pone a la escucha los eventos de actualizaciones
-        checks();
+        }
     });
     //Cuando se llama a .close() la ventana principal se cierra
     appWin.on( "closed", () => appWin = null );
@@ -132,19 +129,30 @@ ipcMain.on( 'downloadApp', () => autoUpdater.downloadUpdate() );
 ipcMain.on( 'installApp', () => autoUpdater.quitAndInstall() );
 //OBTENER VERSION DE APP
 ipcMain.on( 'getVersion', ( event, args ) => { event.sender.send( 'getVersion', app.getVersion() ) });
+//COMPRUEBA ACTUALIZACIONES
+ipcMain.on('checkUpdates', (event, args) => { checkUpdates(args) });
+
+/**
+ * * Comprueba actualizaciones
+ */
+const checkUpdates = (flag) => {
+    store.set('flagUpdate', flag);
+    autoUpdater.checkForUpdatesAndNotify();
+    checks();
+};
 
 /**
  * * Eventos de Actualizaciones Automáticas
- */
+*/
 const checks = () => {
     autoUpdater.on( 'checking-for-update', () => {
-        appWin.webContents.send( 'checking_for_update' );
+        appWin.webContents.send( 'checking_for_update', store.get('flagUpdate') );
     });
     autoUpdater.on( 'update-available', ( info ) => {
-        appWin.webContents.send( 'update_available', info );
+        appWin.webContents.send( 'update_available', { info, flag: store.get('flagUpdate') } );
     });
     autoUpdater.on( 'update-not-available', () => {
-        appWin.webContents.send( 'update_not_available' );
+        appWin.webContents.send( 'update_not_available', store.get('flagUpdate') );
     });
     autoUpdater.on( 'download-progress', ( progressObj ) => {
         appWin.webContents.send( 'download_progress', Math.trunc( progressObj.percent ) );

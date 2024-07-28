@@ -114,8 +114,14 @@ export class LoginComponent {
           this.ipcService.once('getChangeLog', (event, args) => {
             //Se guardan los datos de CHANGELOG en el sessionStorage
             sessionStorage.setItem('changeLog', args);
-            //Si está marcado 'recordar cuenta' se guardan los datos en el store
-            if(this.remember) this.ipcService.send('setLogin', this.data);
+            //Si está marcado 'recordar cuenta'...
+            if(this.remember) {
+              //Se guardan los datos en el store
+              this.ipcService.send('setLogin', this.data);
+              this.ipcService.removeAllListeners('setLogin');
+            }
+            //Guarda la bandera de flagUpdate en 'false' para que muestre si hay updates
+            sessionStorage.setItem('flagUpdate', 'false');
             //Se oculta el loading
             this.controllerService.stop_loading();
             //Redirige a Dashboard detectando la zona de angular

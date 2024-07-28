@@ -32,18 +32,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.ipcService.once('checkChangeLog', (event, args) => { if(args != false) this.router.navigate(['/ChangeLog']) });
   }
   ngAfterViewInit(): void {
-    //Escucha si está comprobando actualizaciones
-    this.ipcService.on('checking_for_update', (event, data) => {
-      this.controllerService.loading('Buscando Actualizaciones...');
+    //Comprueba si hay actualizaciones al iniciar la vista
+    this.ipcService.send('checkUpdates', false);
+    //Escucha el evento de verificacion de actualizaciones desde el menú
+    
+    //Escucha si está buscando actualizaciones
+    this.ipcService.on('checking_for_update', (event, flag) => {
+      if(flag) this.controllerService.loading('Buscando Actualizaciones...');
     });
     //Escucha si hay una actualización disponible
     this.ipcService.on('update_available', (event, data) => {
-      this.controllerService.stop_loading();
-      this.update_available(data);
+      if(sessionStorage.getItem('flagUpdate') === 'false') this.update_available(data);
+      else {
+        if(data.flag) this.update_available(data);
+      }
     });
     //Escucha si no hay ninguna actualización disponible
-    this.ipcService.on('update_not_available', (event, data) => {
-      this.controllerService.stop_loading();
+    this.ipcService.on('update_not_available', (event, flag) => {
+      if(flag) this.controllerService.stop_loading();
     });
     //Escucha el progreso de la descarga
     this.ipcService.on('download_progress', (event, progressObj) => {
@@ -71,7 +77,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private update_available(data: any): void {
     Swal.fire({
       title: "Actualización Disponible!",
-      html: `Hay una actualización disponible<br>Versión: <strong>${data.version}</strong><br>¿Quieres descargarla ahora?`,
+      html: `Hay una actualización disponible<br>Versión: <strong>${data.info.version}</strong><br>¿Quieres descargarla ahora?`,
       icon: "info",
       showCancelButton: true,
       confirmButtonColor: `${this.storageService.getThemeCss('swal')}`,
@@ -86,7 +92,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.renderer.removeClass(this.loadingProcess.nativeElement, 'none');
         //Se envia ipc para descargar la App
         this.ipcService.send('downloadApp');
-      }
+      }else if(result.dismiss === Swal.DismissReason.cancel) sessionStorage.setItem('flagUpdate', 'true');
     });
   }
 }
