@@ -33,19 +33,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //Escucha si está buscando actualizaciones
-    this.ipcService.on('checking_for_update', (event, flag) => {
-      if(flag) this.controllerService.loading('Buscando Actualizaciones...');
+    this.ipcService.on('checking_for_update', (event, args) => {
+      this.controllerService.loading('Buscando Actualizaciones...');
     });
     //Escucha si hay una actualización disponible
-    this.ipcService.on('update_available', (event, data) => { this.update_available(data) });
+    this.ipcService.on('update_available', (event, data) => {
+      if(Swal) this.controllerService.stop_loading();
+      this.update_available(data)
+    });
     //Escucha si no hay ninguna actualización disponible
-    this.ipcService.on('update_not_available', (event, flag) => {
-      if(flag) {
-        //Se oculta el loading
-        this.controllerService.stop_loading();
-        //Se muestra un mixin
-        this.controllerService.toast('top-end', 'info', 'No hay actualizaciones');
-      }
+    this.ipcService.on('update_not_available', (event, args) => {
+      if(Swal) this.controllerService.stop_loading();
     });
     //Escucha el progreso de la descarga
     this.ipcService.on('download_progress', (event, progressObj) => {
@@ -61,7 +59,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.ipcService.on('error_update', (event, data) => {
       Swal.fire({
         icon: 'error',
-        text: 'Ha habido un error en la actualización. Por favor, revisa los log',
+        text: `Error Updates: ${JSON.stringify(data)}`,
         allowOutsideClick: false
       });
     });

@@ -27,7 +27,7 @@ const MENU_TEMPLATE = isDev ? [
         label: process.platform === 'darwin' ? app.name : 'Archivo',
         submenu: [
             { role: 'toggledevtools' },
-            { label: 'Comprobar Actualizaciones', click: () => checkUpdates(true) }
+            { label: 'Comprobar Actualizaciones', click: () => autoUpdater.checkForUpdatesAndNotify() }
         ]
     }
 ] : [
@@ -39,6 +39,8 @@ const MENU_TEMPLATE = isDev ? [
     }
 ];
 const MENU = Menu.buildFromTemplate( MENU_TEMPLATE );
+const MENU_TRY_TEMPLATE = [ {label: 'Salir', click: () => app.quit()} ];
+const MENU_TRY = Menu.buildFromTemplate( MENU_TRY_TEMPLATE );
 
 /**
  * * Propiedades de AutoUpdater
@@ -155,7 +157,7 @@ function home() {
     appWin = new BrowserWindow(
         { 
             width: 950, 
-            height: 720,
+            height: 730,
             resizable: false,
             x: Math.round( (screen.getPrimaryDisplay().workAreaSize.width - 950) / 2 ),
             y: Math.round( (screen.getPrimaryDisplay().workAreaSize.height - 720) / 2 ), 
@@ -177,7 +179,10 @@ function home() {
             autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
             autoUpdater.forceDevUpdateConfig = true; 
         }*/
-        checkUpdates(false);
+        //Pone a la escucha la comprobación de actualizaciones
+        autoUpdater.checkForUpdatesAndNotify();
+        //Pone a la escucha los eventos de actualizaciones
+        checks();
     });
     //Cuando se llama a .close() la ventana principal se cierra
     appWin.on( "closed", () => appWin = null );
@@ -189,15 +194,16 @@ function home() {
 app.whenReady().then( () => {
     //Se crea la app..
     appInit();
+    //Si estamos en macOs establece la barra de menu General
     if(process.platform === 'darwin') Menu.setApplicationMenu(MENU);
-    //Si estamos en windows...
-    if(process.platform === 'win32') {
+    //Si estamos en Windows...
+    else {
         //Se crea una instancia de 'Tray' (Icono en la barra de tareas)
         tray = new Tray(ICON_NATIVE);
         //Se crea un nombre para la bandeja
         tray.setToolTip('STManagement');
         //Se crea un menu para la bandeja
-        tray.setContextMenu(Menu.buildFromTemplate([ {label: 'Salir', click: () => app.quit()} ]));
+        tray.setContextMenu(MENU_TRY);
     }
 });
 
@@ -246,26 +252,17 @@ ipcMain.on( 'installApp', () => autoUpdater.quitAndInstall() );
 ipcMain.on('checkUpdates', (event, args) => { checkUpdates(args) });
 
 /**
- * * Comprueba actualizaciones
- */
-const checkUpdates = (flag) => {
-    store.set('flagUpdate', flag);
-    autoUpdater.checkForUpdatesAndNotify();
-    checks();
-};
-
-/**
  * * Eventos de Actualizaciones Automáticas
 */
 const checks = () => {
     autoUpdater.on( 'checking-for-update', () => {
-        appWin.webContents.send( 'checking_for_update', store.get('flagUpdate') );
+        appWin.webContents.send( 'checking_for_update' );
     });
     autoUpdater.on( 'update-available', ( info ) => {
         appWin.webContents.send( 'update_available', info );
     });
     autoUpdater.on( 'update-not-available', () => {
-        appWin.webContents.send( 'update_not_available', store.get('flagUpdate') );
+        appWin.webContents.send( 'update_not_available' );
     });
     autoUpdater.on( 'download-progress', ( progressObj ) => {
         appWin.webContents.send( 'download_progress', Math.trunc( progressObj.percent ) );
@@ -275,8 +272,7 @@ const checks = () => {
         appWin.webContents.send( 'update_downloaded' );
     });
     autoUpdater.on( 'error', ( error ) => {
-        fs.writeFile(`${ASSETS}/log.txt`, error, (errorReq) => {
-            appWin.webContents.send( 'error_update' );
-        });
+        store.set('logUpdate', error);
+        appWin.webContents.send( 'error_update', store.get('logUpdate') );
     });
 };
