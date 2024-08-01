@@ -15,9 +15,9 @@ const store = new Store();
 const __dirname = path.resolve();
 
 const URL_POST = 'https://rivendel.com.es/query.php';
-const URL_HOME = isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'stmanagement', 'browser', 'index.html')}`;
-const URL_PRELOAD = isDev ? 'http://localhost:4200#/Preload' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'stmanagement', 'browser', 'index.html#', 'Preload')}`;
-const URL_LOGIN = isDev ? 'http://localhost:4200#/Login' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'stmanagement', 'browser', 'index.html#', 'Login')}`;
+const URL_HOME = isDev ? 'http://localhost:4200/' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'browser', 'index.html')}`;
+const URL_PRELOAD = isDev ? 'http://localhost:4200#/Preload' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'browser', 'index.html')}#/Preload`;
+const URL_LOGIN = isDev ? 'http://localhost:4200#/Login' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'browser', 'index.html')}#/Login`;
 const ASSETS = isDev ? path.join(__dirname, 'src', 'assets') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets');
 const CHANGELOG = isDev ? path.join(__dirname, 'CHANGELOG.md') : path.join(process.resourcesPath, 'app.asar', 'CHANGELOG.md');
 const ICON = isDev ? path.join(__dirname, 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png');
