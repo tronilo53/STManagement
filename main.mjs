@@ -173,10 +173,10 @@ function home() {
     appWin.once( "ready-to-show", () => {
         appWin.webContents.send('getUserData', { data: store.get('userData'), version: app.getVersion() });
         //UPDATES DE PRUEBA
-        if(isDev) {
+        /*if(isDev) {
             autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
             autoUpdater.forceDevUpdateConfig = true; 
-        }
+        }*/
         checkUpdates(false);
     });
     //Cuando se llama a .close() la ventana principal se cierra
