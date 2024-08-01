@@ -1,6 +1,6 @@
 {
   "name": "STManagement",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "main.mjs",
   "type": "module",
   "license": "MIT",
