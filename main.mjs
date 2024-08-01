@@ -268,8 +268,12 @@ const checks = () => {
         appWin.webContents.send( 'download_progress', Math.trunc( progressObj.percent ) );
     });
     autoUpdater.on( 'update-downloaded', () => {
-        store.set('changeLog', true);
-        appWin.webContents.send( 'update_downloaded' );
+        const downloadedFilePath = info.downloadedFile;
+        // Eliminar el atributo `quarantine`
+        exec(`xattr -d com.apple.quarantine "${downloadedFilePath}"`, (error, stdout, stderr) => {
+            store.set('changeLog', true);
+            appWin.webContents.send( 'update_downloaded' );
+        });
     });
     autoUpdater.on( 'error', ( error ) => {
         store.set('logUpdate', error);
