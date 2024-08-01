@@ -267,7 +267,7 @@ const checks = () => {
     autoUpdater.on( 'download-progress', ( progressObj ) => {
         appWin.webContents.send( 'download_progress', Math.trunc( progressObj.percent ) );
     });
-    autoUpdater.on( 'update-downloaded', () => {
+    autoUpdater.on( 'update-downloaded', (info) => {
         const downloadedFilePath = info.downloadedFile;
         // Eliminar el atributo `quarantine`
         exec(`xattr -d com.apple.quarantine "${downloadedFilePath}"`, (error, stdout, stderr) => {
