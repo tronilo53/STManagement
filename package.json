@@ -12,7 +12,7 @@
     "build": "ng build --configuration production",
     "build:mac": "npm run build && electron-builder --mac --publish always",
     "build:win": "npm run build && electron-builder --win --publish always",
-    "build:dev": "ng build && electron-builder",
+    "build:dev": "ng build --configuration production && electron-builder",
     "electron": "electron ."
   },
   "private": true,
@@ -74,7 +74,7 @@
     },
     "mac": {
       "target": "dmg",
-      "identity": "STManagement",
+      "identity": null,
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
       "category": "public.app-category.utilities",
