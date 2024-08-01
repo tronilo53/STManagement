@@ -193,7 +193,7 @@ app.whenReady().then( () => {
     //Si estamos en windows...
     if(process.platform === 'win32') {
         //Se crea una instancia de 'Tray' (Icono en la barra de tareas)
-        tray = new Tray(ICON);
+        tray = new Tray(ICON_NATIVE);
         //Se crea un nombre para la bandeja
         tray.setToolTip('STManagement');
         //Se crea un menu para la bandeja
