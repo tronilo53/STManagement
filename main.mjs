@@ -9,6 +9,7 @@ import path from 'path';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import { Agent } from "https";
+import { exec } from 'child_process';
 
 const { autoUpdater } = pkg;
 const store = new Store();
