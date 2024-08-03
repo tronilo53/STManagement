@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IpcService } from '../../../services/ipc.service';
 import { Router } from '@angular/router';
 import { ControllerService } from '../../../services/controller.service';
@@ -23,13 +23,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private router: Router,
     private controllerService: ControllerService,
     public storageService: StorageService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
     //IPC Para comprobar si se ha instalado una actualización
     this.ipcService.send('checkChangeLog');
-    this.ipcService.once('checkChangeLog', (event, args) => { if(args != false) this.router.navigate(['/ChangeLog']) });
+    this.ipcService.once('checkChangeLog', (event, args) => { if(args != false) this.ngZone.run(() => { this.router.navigate(['/ChangeLog']) }) });
   }
   ngAfterViewInit(): void {
     //Escucha si está buscando actualizaciones

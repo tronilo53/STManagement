@@ -16,15 +16,19 @@ export class DataGuard implements CanActivate {
   canActivate(): Promise<boolean> {
     //Devuelve una promesa
     return new Promise((resolve) => {
-      //Escucha los datos del usuario logueado
-      this.ipcService.once('getUserData', (event, args) => {
-        //Guarda los datos del usuario en el sessionStorage y en el Bihavior
-        this.storageService.setUserData(args.data);
-        //guarda la version de la app en el sessionStorage
-        sessionStorage.setItem('version', args.version);
-        //Permite el acceso
-        resolve(true);
-      });
+      if(!sessionStorage.getItem('version') || !sessionStorage.getItem('changeLog')) {
+        //Obtiene los datos del usuario logueado y los datos de la aplicacion
+        this.ipcService.once('getUserData', (event, args) => {
+          //Guarda los datos del usuario en el sessionStorage y en el Bihavior
+          this.storageService.setUserData(args.data);
+          //guarda la version de la app en el sessionStorage
+          sessionStorage.setItem('version', args.version);
+          //Guarda los datos del changelog en el sessionStorage
+          sessionStorage.setItem('changeLog', args.changelog);
+          //Permite el acceso
+          resolve(true);
+        });
+      }else resolve(true);
     });
   }
 }

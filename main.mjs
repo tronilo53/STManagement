@@ -54,6 +54,8 @@ let appWin;
 let appPreload;
 let appLogin;
 
+//store.set('changeLog', true);
+
 /**
  * * Función de ventana principal
  */
@@ -169,16 +171,20 @@ function home() {
     if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
-        appWin.webContents.send('getUserData', { data: store.get('userData'), version: app.getVersion() });
-        //UPDATES DE PRUEBA
-        /*if(isDev) {
-            autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
-            autoUpdater.forceDevUpdateConfig = true; 
-        }*/
-        //Pone a la escucha la comprobación de actualizaciones
-        autoUpdater.checkForUpdatesAndNotify();
-        //Pone a la escucha los eventos de actualizaciones
-        checks();
+        //lee el changelog
+        fs.readFile(CHANGELOG, 'utf8', (err, data) => {
+            //Manda los datos al renderer
+            appWin.webContents.send('getUserData', { data: store.get('userData'), version: app.getVersion(), changelog: data });
+            //UPDATES DE PRUEBA
+            /*if(isDev) {
+                autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
+                autoUpdater.forceDevUpdateConfig = true; 
+            }*/
+            //Pone a la escucha la comprobación de actualizaciones
+            autoUpdater.checkForUpdatesAndNotify();
+            //Pone a la escucha los eventos de actualizaciones
+            checks();
+        })
     });
     //Cuando se llama a .close() la ventana principal se cierra
     appWin.on( "closed", () => appWin = null );
@@ -215,8 +221,6 @@ ipcMain.on('deleteLogin', (event, args) => { store.delete('loginData') });
 ipcMain.on('checkChangeLog', (event, args) => { event.sender.send('checkChangeLog', store.get('changeLog', false)) });
 //Elimina del store la bandera de la instalacion de la nueva actualizacion
 ipcMain.on('deleteChangeLog', (event, args) => { store.delete('changeLog'); });
-//Obtiene la info del fichero CHANGELOG.md
-ipcMain.on('getChangeLog', (event, args) => { fs.readFile(CHANGELOG, 'utf8', (err, data) => { event.sender.send('getChangeLog', data) }) });
 //Escucha para abrir la ventana del home
 ipcMain.on('loginSuccess', (event, args) => {
     //Guarda los datos del usuario logueado en el storage
