@@ -51,25 +51,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.renderer.setProperty(this.process.nativeElement, 'innerHTML', `${progressObj}%`);
     });
     //escucha si la actualización se ha descargado
-    this.ipcService.on('update_downloaded', (event, data) => {
-      Swal.fire({
-        icon: 'info',
-        text: `Update Downloaded: ${JSON.stringify(data)}`,
-        allowOutsideClick: false
-      });
-      //this.ipcService.send('installApp');
-      //this.ipcService.removeAllListeners('installApp');
+    this.ipcService.on('update_downloaded', (event, args) => {
+      if(args === 'windows') this.ipcService.send('installApp');
+      else {
+        if(args !== '001') {
+          Swal.fire({
+            icon: 'error',
+            text: `Error Updates: ${JSON.stringify(args)}`,
+            allowOutsideClick: false
+          });
+        }else this.ipcService.send('closeApp');
+      }
     });
     //Escucha si hay algun error en la actualización
-    this.ipcService.on('error_update', (event, data) => {
-      Swal.fire({
-        icon: 'error',
-        text: `Error Updates: ${JSON.stringify(data)}`,
-        allowOutsideClick: false
-      });
+    this.ipcService.on('error_update', (event, args) => {
+      if(JSON.stringify(args).indexOf('SQRLCodeSignature') < 0) {
+        Swal.fire({
+          icon: 'error',
+          text: `Error Updates: ${JSON.stringify(args)}`,
+          allowOutsideClick: false
+        });
+      }
     });
   }
-
+  
   /**
    * *Function: Muestra una alerta de actualización disponible
    */

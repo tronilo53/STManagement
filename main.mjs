@@ -170,7 +170,8 @@ function home() {
         });
     appWin.loadURL(URL_HOME);
     if(process.platform === 'win32') appWin.setMenu(MENU);
-    if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
+    //if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
+    appWin.webContents.openDevTools({ mode: 'detach' });
     
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
@@ -188,6 +189,31 @@ function home() {
     //Cuando se llama a .close() la ventana principal se cierra
     appWin.on( "closed", () => appWin = null );
 }
+
+// Función para eliminar atributos extendidos
+const removeExtendedAttributes = (filePath, callback) => {
+    const attributes = ['com.apple.quarantine', 'com.apple.provenance'];
+    let attributeIndex = 0;
+
+    const removeNextAttribute = () => {
+        if (attributeIndex >= attributes.length) {
+            callback(null);
+            return;
+        }
+
+        const attribute = attributes[attributeIndex];
+        exec(`xattr -d ${attribute} "${filePath}"`, (error, stdout, stderr) => {
+            attributeIndex++;
+            if (error && !error.message.includes('No such xattr')) {
+                callback(error.message || stderr);
+            } else {
+                removeNextAttribute();
+            }
+        });
+    };
+
+    removeNextAttribute();
+};
 
 /**
  * * Preparar la App
@@ -269,15 +295,48 @@ const checks = () => {
         appWin.webContents.send( 'download_progress', Math.trunc( progressObj.percent ) );
     });
     autoUpdater.on( 'update-downloaded', (info) => {
-        const downloadedFilePath = info.downloadedFile;
-        // Eliminar el atributo `quarantine`
-        exec(`xattr -d com.apple.quarantine "${downloadedFilePath}"`, (error, stdout, stderr) => {
+        //Si estamos en macOs...
+        if(process.platform === 'darwin') {
+            //Se guarda la ruta de la app descargada
+            const downloadedFilePath = info.downloadedFile;
+            // Eliminar atributos extendidos del archivo descargado
+            removeExtendedAttributes(downloadedFilePath, (error) => {
+                if (error) {
+                    appWin.webContents.send('update_downloaded', error);
+                    return;
+                }
+                // Asumir que el archivo es un zip y extraerlo
+                const extractedPath = path.join(path.dirname(downloadedFilePath), 'extracted');
+                exec(`unzip "${downloadedFilePath}" -d "${extractedPath}"`, (unzipError) => {
+                    if (unzipError) {
+                        appWin.webContents.send('update_downloaded', unzipError.message);
+                        return;
+                    }
+                    // Eliminar atributos extendidos de todos los archivos dentro del paquete .app
+                    const appPath = path.join(extractedPath, 'STManagement.app');
+                    removeExtendedAttributes(appPath, (quarantineError) => {
+                        if (quarantineError) {
+                            appWin.webContents.send('update_downloaded', quarantineError);
+                            return;
+                        }
+                        // Reemplazar la aplicación actual con la nueva versión descomprimida
+                        const appInstallPath = '/Applications/STManagement.app';
+                        exec(`rm -rf "${appInstallPath}" && mv "${appPath}" "${appInstallPath}"`, (moveError) => {
+                            if (moveError) appWin.webContents.send('update_downloaded', moveError.message);
+                            else {
+                                store.set('changeLog', true);
+                                appWin.webContents.send('update_downloaded', '001');
+                            }
+                        });
+                    });
+                });
+            });
+        }else {
             store.set('changeLog', true);
-            appWin.webContents.send( 'update_downloaded', error | stderr | stdout );
-        });
+            appWin.webContents.send( 'update_downloaded', 'windows' );
+        }
     });
     autoUpdater.on( 'error', ( error ) => {
-        store.set('logUpdate', error);
-        appWin.webContents.send( 'error_update', store.get('logUpdate') );
+        appWin.webContents.send( 'error_update', error );
     });
 };
