@@ -1,7 +1,7 @@
 /**
  * * Importaciones de Módulos
  */
-import { app, BrowserWindow, ipcMain, Menu, Tray, screen, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, screen } from "electron";
 import isDev from "electron-is-dev";
 import pkg from "electron-updater";
 import Store from "electron-store";
@@ -21,8 +21,7 @@ const URL_PRELOAD = isDev ? 'http://localhost:4200#/Preload' : `file://${path.jo
 const URL_LOGIN = isDev ? 'http://localhost:4200#/Login' : `file://${path.join(process.resourcesPath, 'app.asar', 'dist', 'browser', 'index.html')}#/Login`;
 const ASSETS = isDev ? path.join(__dirname, 'src', 'assets') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets');
 const CHANGELOG = isDev ? path.join(__dirname, 'CHANGELOG.md') : path.join(process.resourcesPath, 'app.asar', 'CHANGELOG.md');
-const ICON = isDev ? path.join(__dirname, 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png') : path.join(process.resourcesPath, 'app.asar', 'src', 'assets', process.platform === 'darwin' ? 'icon.icns' : 'icon.png');
-const ICON_NATIVE = nativeImage.createFromPath(ICON);
+const ICON = path.join(ASSETS, process.platform === 'darwin' ? 'icon.icns' : 'icon.png');
 const MENU_TEMPLATE = isDev ? [
     {
         label: process.platform === 'darwin' ? app.name : 'Archivo',
@@ -40,8 +39,6 @@ const MENU_TEMPLATE = isDev ? [
     }
 ];
 const MENU = Menu.buildFromTemplate( MENU_TEMPLATE );
-const MENU_TRY_TEMPLATE = [ {label: 'Salir', click: () => app.quit()} ];
-const MENU_TRY = Menu.buildFromTemplate( MENU_TRY_TEMPLATE );
 
 /**
  * * Propiedades de AutoUpdater
@@ -56,7 +53,6 @@ autoUpdater.setMaxListeners(20);
 let appWin;
 let appPreload;
 let appLogin;
-let tray = null;
 
 /**
  * * Función de ventana principal
@@ -74,7 +70,7 @@ function appInit() {
                 contextIsolation: false, 
                 nodeIntegration: true 
             },
-            icon: ICON_NATIVE,
+            icon: ICON,
             frame: false
         });
     appPreload.loadURL(URL_PRELOAD);
@@ -142,7 +138,7 @@ function login() {
                 contextIsolation: false, 
                 nodeIntegration: true 
             },
-            icon: ICON_NATIVE
+            icon: ICON
         });
     appLogin.loadURL(URL_LOGIN);
     appLogin.setMenu(null);
@@ -166,13 +162,11 @@ function home() {
                 contextIsolation: false, 
                 nodeIntegration: true 
             },
-            icon: ICON_NATIVE
+            icon: ICON
         });
     appWin.loadURL(URL_HOME);
     if(process.platform === 'win32') appWin.setMenu(MENU);
-    //if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
-    appWin.webContents.openDevTools({ mode: 'detach' });
-    
+    if(isDev) appWin.webContents.openDevTools({ mode: 'detach' });
     //Cuando la ventana está lista para ser mostrada...
     appWin.once( "ready-to-show", () => {
         appWin.webContents.send('getUserData', { data: store.get('userData'), version: app.getVersion() });
@@ -190,31 +184,6 @@ function home() {
     appWin.on( "closed", () => appWin = null );
 }
 
-// Función para eliminar atributos extendidos
-const removeExtendedAttributes = (filePath, callback) => {
-    const attributes = ['com.apple.quarantine', 'com.apple.provenance'];
-    let attributeIndex = 0;
-
-    const removeNextAttribute = () => {
-        if (attributeIndex >= attributes.length) {
-            callback(null);
-            return;
-        }
-
-        const attribute = attributes[attributeIndex];
-        exec(`xattr -d ${attribute} "${filePath}"`, (error, stdout, stderr) => {
-            attributeIndex++;
-            if (error && !error.message.includes('No such xattr')) {
-                callback(error.message || stderr);
-            } else {
-                removeNextAttribute();
-            }
-        });
-    };
-
-    removeNextAttribute();
-};
-
 /**
  * * Preparar la App
  */
@@ -223,15 +192,6 @@ app.whenReady().then( () => {
     appInit();
     //Si estamos en macOs establece la barra de menu General
     if(process.platform === 'darwin') Menu.setApplicationMenu(MENU);
-    //Si estamos en Windows...
-    else {
-        //Se crea una instancia de 'Tray' (Icono en la barra de tareas)
-        tray = new Tray(ICON_NATIVE);
-        //Se crea un nombre para la bandeja
-        tray.setToolTip('STManagement');
-        //Se crea un menu para la bandeja
-        tray.setContextMenu(MENU_TRY);
-    }
 });
 
 // Manejar promesas rechazadas globalmente
@@ -339,4 +299,31 @@ const checks = () => {
     autoUpdater.on( 'error', ( error ) => {
         appWin.webContents.send( 'error_update', error );
     });
+};
+
+/**
+ * *Function: Elimina atributos extendidos
+ */
+const removeExtendedAttributes = (filePath, callback) => {
+    const attributes = ['com.apple.quarantine', 'com.apple.provenance'];
+    let attributeIndex = 0;
+
+    const removeNextAttribute = () => {
+        if (attributeIndex >= attributes.length) {
+            callback(null);
+            return;
+        }
+
+        const attribute = attributes[attributeIndex];
+        exec(`xattr -d ${attribute} "${filePath}"`, (error, stdout, stderr) => {
+            attributeIndex++;
+            if (error && !error.message.includes('No such xattr')) {
+                callback(error.message || stderr);
+            } else {
+                removeNextAttribute();
+            }
+        });
+    };
+
+    removeNextAttribute();
 };
