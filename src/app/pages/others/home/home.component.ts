@@ -52,8 +52,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
     //escucha si la actualización se ha descargado
     this.ipcService.on('update_downloaded', (event, data) => {
-      this.ipcService.send('installApp');
-      this.ipcService.removeAllListeners('installApp');
+      Swal.fire({
+        icon: 'info',
+        text: `Update Downloaded: ${JSON.stringify(data)}`,
+        allowOutsideClick: false
+      });
+      //this.ipcService.send('installApp');
+      //this.ipcService.removeAllListeners('installApp');
     });
     //Escucha si hay algun error en la actualización
     this.ipcService.on('error_update', (event, data) => {

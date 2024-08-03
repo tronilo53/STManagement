@@ -273,7 +273,7 @@ const checks = () => {
         // Eliminar el atributo `quarantine`
         exec(`xattr -d com.apple.quarantine "${downloadedFilePath}"`, (error, stdout, stderr) => {
             store.set('changeLog', true);
-            appWin.webContents.send( 'update_downloaded' );
+            appWin.webContents.send( 'update_downloaded', error | stderr | stdout );
         });
     });
     autoUpdater.on( 'error', ( error ) => {
