@@ -63,16 +63,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }else this.ipcService.send('closeApp');
       }
     });
-    //Escucha si hay algun error en la actualización
-    this.ipcService.on('error_update', (event, args) => {
-      if(JSON.stringify(args).indexOf('SQRLCodeSignature') < 0) {
-        Swal.fire({
-          icon: 'error',
-          text: `Error Updates: ${JSON.stringify(args)}`,
-          allowOutsideClick: false
-        });
-      }
-    });
   }
   
   /**
