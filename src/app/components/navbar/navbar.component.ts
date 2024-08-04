@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit {
    */
   public isDropdownActive_Stock(): boolean {
     return this.currentUrl === '/Dashboard/Components' ||
-           this.currentUrl === '/Dashboard/Apparatus';
+           this.currentUrl === '/Dashboard/Devices';
   }
 
   /**

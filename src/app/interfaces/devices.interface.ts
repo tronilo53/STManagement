@@ -1,4 +1,4 @@
-export interface Apparatus {
+export interface Devices {
     id: number;
     referencia: string;
     categoria: string;

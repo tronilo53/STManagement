@@ -38,7 +38,7 @@
                 <h5>Mostrando <span [class]="storageService.getThemeCss('text')">{{ showApparatus }}</span></h5>
             </div>
         </div>
-        <div class="row text-center mt-5" *ngIf="loading && apparatus.length == 0">
+        <div class="row text-center mt-5" *ngIf="loading && devices.length == 0">
             <div class="col">
                 <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
                     <span class="visually-hidden">Loading...</span>
@@ -46,15 +46,15 @@
                 <h3>Espere...</h3>
             </div>
         </div>
-        <div class="row text-center" *ngIf="!loading && apparatus.length == 0">
+        <div class="row text-center" *ngIf="!loading && devices.length == 0">
             <div class="col">
                 <div [class]="storageService.getThemeCss('alert')" role="alert">No se han encontrado resultados</div>
             </div>
         </div>
-        <div class="row mb-5" *ngIf="!loading && apparatus.length > 0">
+        <div class="row mb-5" *ngIf="!loading && devices.length > 0">
             <div class="col-6">
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of apparatus">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of devices">
                         <img [src]="a.imagen" [alt]="a.categoria" style="width: 3rem;">
                         <span [class]="storageService.getThemeCss('badge')">{{ a.referencia }}</span>
                     </li>
@@ -64,7 +64,7 @@
                 <div class="card {{ storageService.getThemeCss('card') }} mb-3 text-center">
                     <div class="card-header">Cantidad en Stock</div>
                     <div class="card-body">
-                        <h1 class="card-title">{{ apparatus.length }}</h1>
+                        <h1 class="card-title">{{ devices.length }}</h1>
                     </div>
                 </div>
             </div>

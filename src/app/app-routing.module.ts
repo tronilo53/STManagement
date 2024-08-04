@@ -11,7 +11,7 @@ import { OrdersComponent } from './pages/admin/orders/orders.component';
 import { ChangelogComponent } from './pages/changelog/changelog.component';
 import { DataGuard } from './guards/data.guard';
 import { ComponentsComponent } from './pages/others/components/components.component';
-import { ApparatusComponent } from './pages/others/apparatus/apparatus.component';
+import { DevicesComponent } from './pages/others/devices/devices.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
@@ -24,7 +24,7 @@ const routes: Routes = [
     children: [
       { path: 'Home', component: HomeComponent },
       { path: 'Components', component: ComponentsComponent },
-      { path: 'Apparatus', component: ApparatusComponent },
+      { path: 'Devices', component: DevicesComponent },
       { path: 'Simulation', component: SimulationComponent },
       { path: 'Taxs', component: TaxsComponent },
       { path: 'Orders', component: OrdersComponent },

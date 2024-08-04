@@ -15,7 +15,7 @@ import { TaxsComponent } from './admin/taxs/taxs.component';
 import { OrdersComponent } from './admin/orders/orders.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './others/components/components.component';
-import { ApparatusComponent } from './others/apparatus/apparatus.component';
+import { DevicesComponent } from './others/devices/devices.component';
 import { DirectivesModule } from '../directives/directives.module';
 
 
@@ -32,7 +32,7 @@ import { DirectivesModule } from '../directives/directives.module';
     OrdersComponent,
     ChangelogComponent,
     ComponentsComponent,
-    ApparatusComponent
+    DevicesComponent
   ],
   imports: [
     CommonModule,
@@ -53,7 +53,7 @@ import { DirectivesModule } from '../directives/directives.module';
     OrdersComponent,
     ChangelogComponent,
     ComponentsComponent,
-    ApparatusComponent
+    DevicesComponent
   ]
 })
 export class PagesModule { }

@@ -1,21 +1,21 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { StorageService } from '../../../services/storage.service';
-import { Apparatus } from '../../../interfaces/apparatus.interface';
 import { DataService } from '../../../services/data.service';
 import { ControllerService } from '../../../services/controller.service';
+import { Devices } from '../../../interfaces/devices.interface';
 
 @Component({
-  selector: 'app-apparatus',
-  templateUrl: './apparatus.component.html',
-  styleUrl: './apparatus.component.css'
+  selector: 'app-devices',
+  templateUrl: './devices.component.html',
+  styleUrl: './devices.component.css'
 })
-export class ApparatusComponent implements OnInit {
+export class DevicesComponent implements OnInit {
 
   /**
    * *Propiedades
    */
   @ViewChild('categoriaSelect') categoriaSelect: ElementRef;
-  public apparatus: Apparatus[] = [];
+  public devices: Devices[] = [];
   public loading: boolean = false;
   public isUpVisible: boolean = false;
   public categoria: string = '???';
@@ -33,9 +33,9 @@ export class ApparatusComponent implements OnInit {
     //Se muestra el loading
     this.loading = true;
     //Peticion para obtener todos los aparatos
-    this.dataService.http({ code: '008' }).subscribe((resp: Apparatus[]) => {
+    this.dataService.http({ code: '008' }).subscribe((resp: Devices[]) => {
       //se guardan los aparatos recibidos
-      this.apparatus = resp;
+      this.devices = resp;
       //Se modifica el showApparatus
       this.showApparatus = 'Todos los Equipos Desincal';
       //Se oculta el loading
@@ -90,13 +90,13 @@ export class ApparatusComponent implements OnInit {
     //Muestra el loading
     this.loading = true;
     //Se resetean los aparatos
-    this.apparatus = [];
+    this.devices = [];
     //Se modifica el showApparatus
     this.showApparatus = this.categoria;
     //Peticion para filtrar
-    this.dataService.http({ code: '009', categoria: this.categoria }).subscribe((resp: Apparatus[]) => {
+    this.dataService.http({ code: '009', categoria: this.categoria }).subscribe((resp: Devices[]) => {
       //Se guardan los componentes filtrados
-      this.apparatus = resp
+      this.devices = resp
       //Se oculta el loading
       this.loading = false;
     });
@@ -111,15 +111,15 @@ export class ApparatusComponent implements OnInit {
       //Muestra el loading
       this.loading = true;
       //Resetea todos los aparatos
-      this.apparatus = [];
+      this.devices = [];
       //Resetea todos los campos
       this.categoria = '???';
       //Resetea el showApparatus
       this.showApparatus = 'Todos los Equipos Desincal';
       //Petición para obtener todos los componentes
-      this.dataService.http({ code: '008' }).subscribe((resp: Apparatus[]) => {
+      this.dataService.http({ code: '008' }).subscribe((resp: Devices[]) => {
         //Se guardan todos los componentes
-        this.apparatus = resp;
+        this.devices = resp;
         //Se oculta el loading
         this.loading = false;
       });
