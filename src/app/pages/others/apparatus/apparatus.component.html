@@ -1,1 +1,73 @@
-<p>apparatus works!</p>
+<div class="apparatus animate__animated animate__fadeIn" appScroll (scrolled)="onScroll()">
+    <button [class]="storageService.getThemeCss('button') + ' up'" *ngIf="isUpVisible" (click)="up()">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+                <h2>Equipos Desincal</h2>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <p class="p-0 m-0"><strong>Filtros</strong></p>
+                <div class="card">
+                    <div class="card-body">
+                        <form class="row g-3">
+                            <div class="col-4">
+                                <label for="categoria" class="form-label">Categoría</label>
+                                <select name="categoria" class="form-control" id="categoria" [(ngModel)]="categoria" #categoriaSelect (focus)="deleteBorder()">
+                                    <option value="???" selected>Seleccione...</option>
+                                    <option [value]="c" *ngFor="let c of storageService.getApparatus()">{{ c }}</option>
+                                </select>
+                            </div>
+                            <div class="col-4"></div>
+                            <div class="col-4">
+                                <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+                                    <button type="button" [class]="storageService.getThemeCss('button') + ' w-100'" (click)="validateApply()">Aplicar</button>
+                                    <button type="button" class="btn btn-outline-secondary w-100" (click)="quitApply()">Quitar Filtros</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4" *ngIf="!loading">
+            <div class="col">
+                <h5>Mostrando <span [class]="storageService.getThemeCss('text')">{{ showApparatus }}</span></h5>
+            </div>
+        </div>
+        <div class="row text-center mt-5" *ngIf="loading && apparatus.length == 0">
+            <div class="col">
+                <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h3>Espere...</h3>
+            </div>
+        </div>
+        <div class="row text-center" *ngIf="!loading && apparatus.length == 0">
+            <div class="col">
+                <div [class]="storageService.getThemeCss('alert')" role="alert">No se han encontrado resultados</div>
+            </div>
+        </div>
+        <div class="row mb-5" *ngIf="!loading && apparatus.length > 0">
+            <div class="col-6">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of apparatus">
+                        <img [src]="a.imagen" [alt]="a.categoria" style="width: 3rem;">
+                        <span [class]="storageService.getThemeCss('badge')">{{ a.referencia }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <div class="card {{ storageService.getThemeCss('card') }} mb-3 text-center">
+                    <div class="card-header">Cantidad en Stock</div>
+                    <div class="card-body">
+                        <h1 class="card-title">{{ apparatus.length }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

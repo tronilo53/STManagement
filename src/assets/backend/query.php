@@ -123,6 +123,18 @@
 			}
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
+		//OBTENER TODOS LOS APARATOS
+		case '008':
+			$stmt = $pdo -> prepare('SELECT * FROM aparatos');
+			$stmt -> execute();
+			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		break;
+		//OBTENER TODOS LOS APARATOS FILTRADOS
+		case '009':
+			$stmt = $pdo -> prepare('SELECT * FROM aparatos WHERE categoria = ?');
+			$stmt -> execute([ $params->categoria ]);
+			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		break;
 	}
 
 	header('Content-Type: application/json');

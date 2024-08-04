@@ -17,6 +17,7 @@ export class StorageService {
   private themes: string[] = ['Sweet Honey', 'Healthy Sky', 'Tasty Licorice', 'Gray Storm'];
   private companies: string[] = ['Amazon', 'Digikey', 'Farnell', 'Hispaprint', 'Jlcpcb', 'Mouser', 'Pixarprinting', 'Rs'];
   private categories: string[] = ['Altavoces', 'Antenas', 'Cables', 'Carcasas', 'Circuitos Impresos', 'Compuestos Encapsulantes', 'Condensadores', 'Conectores', 'Conmutadores', 'Contactos', 'Diodos', 'Embalajes', 'Fuentes Alimentacion', 'Fusibles', 'Inductores', 'Integrados', 'Interruptores', 'Microcontroladores', 'Mosfets', 'Octoacopladores', 'Ojales', 'Pantallas', 'Pasamuros', 'Portafusibles', 'Portaleds', 'Pulsadores', 'Reguladores', 'Reles', 'Resistencias', 'Sensores', 'Soportes', 'Terminales', 'Termistores', 'Transistores', 'Varistores', 'Vinilos'];
+  private apparatus: string[] = ['GBD1', 'GBD2', 'GPD3', 'GPD4', 'GAD5', 'GADI5', 'GAD10', 'GADI10', 'GAD50', 'GADI50', 'GAD75', 'GADI75'];
 
   /**
    * *Constructor de la clase
@@ -74,6 +75,12 @@ export class StorageService {
   public getCategories(): string[] { return this.categories }
 
   /**
+   * *Function: Obtiene los aparatos
+   * @returns Devuelve un array de tipo String
+   */
+  public getApparatus(): string[] { return this.apparatus }
+
+  /**
    * *Function: Obtiene la version de la app y el CHANGELOG
    * @returns Devuelve un Objeto de tipo Data
    */
@@ -84,7 +91,7 @@ export class StorageService {
    * @param type Tipo de elemento a aplicar la clase
    * @returns Devuelve la/s clases css en tipo String
    */
-  public getThemeCss(type: string): string {
+  public getThemeCss(type: 'button' | 'nav' | 'alert' | 'badge' | 'text' | 'progress-bar' | 'swal' | 'card'): string {
     //Se crea una variable vacia de tipo String
     let addClass: string = '';
     //Si el elemento recibido es un Botón Se aplica la clase correspondiente dependiendo del tema aplicado
@@ -137,6 +144,13 @@ export class StorageService {
         case 'Healthy Sky': addClass = '#0d6efd'; break;
         case 'Tasty Licorice': addClass = '#dc3545'; break;
         case 'Gray Storm': addClass = '#6c757d'; break;
+      }
+    }else if(type === 'card') {
+      switch(this.getUserData().tema) {
+        case 'Sweet Honey': addClass = 'text-bg-warning'; break;
+        case 'Healthy Sky': addClass = 'text-bg-primary'; break;
+        case 'Tasty Licorice': addClass = 'text-bg-danger'; break;
+        case 'Gray Storm': addClass = 'text-bg-secondary'; break;
       }
     }
     //Devuelve la/s clases css
