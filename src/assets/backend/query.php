@@ -100,6 +100,29 @@
 			//Si no se actualiza...
 			else $res = ['response' => '002'];
 		break;
+		//OBTENER TODOS LOS COMPONENTES
+		case '006':
+			$stmt = $pdo -> prepare('SELECT * FROM componentes');
+			$stmt -> execute();
+			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		break;
+		//OBTENER TODOS LOS COMPONENTES FILTRADOS
+		case '007':
+			//Si se recibe empresa
+			if($params->data->element === 'empresa') {
+				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE empresa = ?');
+				$stmt -> execute([ $params->data->value ]);
+			//Si se recibe categoria
+			}else if($params->data->element === 'categoria') {
+				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE categoria = ?');
+				$stmt -> execute([ $params->data->value ]);
+			//Si se reciben ambos
+			}else {
+				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE empresa = ? AND categoria = ?');
+				$stmt -> execute([ $params->data->empresa, $params->data->categoria ]);
+			}
+			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		break;
 	}
 
 	header('Content-Type: application/json');

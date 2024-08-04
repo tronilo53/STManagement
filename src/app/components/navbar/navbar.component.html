@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm {{ storageService.getThemeCss('nav') }}">
+<nav class="navbar navbar-expand-sm sticky-top {{ storageService.getThemeCss('nav') }}">
     <div class="container-fluid">
         <a class="navbar-brand">
             <img class="logo" src="assets/icon.png" alt="icon.png">
@@ -11,11 +11,15 @@
                 <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/Dashboard/Home']" routerLinkActive="active">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/Dashboard/Stock']" routerLinkActive="active">Stock</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive_Stock() }">Stock</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Components']" routerLinkActive="active">Componentes</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Apparatus']" routerLinkActive="active" >Equipos</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown" *ngIf="storageService.getUserData().tipo_usuario === 'adm'">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive() }">Gestiones</a>
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive_Manag() }">Gestiones</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" [routerLink]="['/Dashboard/Simulation']" routerLinkActive="active">Simulación</a></li>
                         <li><a class="dropdown-item" [routerLink]="['/Dashboard/Orders']" routerLinkActive="active" >Pedidos</a></li>

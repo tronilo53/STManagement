@@ -10,11 +10,13 @@ import { HomeComponent } from './others/home/home.component';
 import { ComponentsModule } from '../components/components.module';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './others/profile/profile.component';
-import { StockComponent } from './others/stock/stock.component';
 import { SimulationComponent } from './admin/simulation/simulation.component';
 import { TaxsComponent } from './admin/taxs/taxs.component';
 import { OrdersComponent } from './admin/orders/orders.component';
 import { ChangelogComponent } from './changelog/changelog.component';
+import { ComponentsComponent } from './others/components/components.component';
+import { ApparatusComponent } from './others/apparatus/apparatus.component';
+import { DirectivesModule } from '../directives/directives.module';
 
 
 
@@ -25,18 +27,20 @@ import { ChangelogComponent } from './changelog/changelog.component';
     HomeComponent,
     LoginComponent,
     ProfileComponent,
-    StockComponent,
     SimulationComponent,
     TaxsComponent,
     OrdersComponent,
-    ChangelogComponent
+    ChangelogComponent,
+    ComponentsComponent,
+    ApparatusComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     ComponentsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    DirectivesModule
   ],
   exports: [
     PreloadComponent,
@@ -44,11 +48,12 @@ import { ChangelogComponent } from './changelog/changelog.component';
     HomeComponent,
     LoginComponent,
     ProfileComponent,
-    StockComponent,
     SimulationComponent,
     TaxsComponent,
     OrdersComponent,
-    ChangelogComponent
+    ChangelogComponent,
+    ComponentsComponent,
+    ApparatusComponent
   ]
 })
 export class PagesModule { }

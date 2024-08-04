@@ -1,0 +1,15 @@
+.up {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+.up > span {
+    vertical-align: middle;
+    font-weight: bold;
+}
+select {
+    cursor: pointer;
+}
+.border__error {
+    border:  1px solid tomato;
+}

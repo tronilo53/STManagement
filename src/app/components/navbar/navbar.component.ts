@@ -33,13 +33,21 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * *Function: Comprueba la ruta actual
+   * *Function: Comprueba la ruta actual del dropdown 'Gestiones'
    * @returns Devuelve la ruta
    */
-  public isDropdownActive(): boolean {
+  public isDropdownActive_Manag(): boolean {
     return this.currentUrl === '/Dashboard/Simulation' ||
            this.currentUrl === '/Dashboard/Orders' ||
            this.currentUrl === '/Dashboard/Taxs';
+  }
+  /**
+   * *Function: Comprueba la ruta actual del dropdown 'Stock'
+   * @returns Devuelve la ruta
+   */
+  public isDropdownActive_Stock(): boolean {
+    return this.currentUrl === '/Dashboard/Components' ||
+           this.currentUrl === '/Dashboard/Apparatus';
   }
 
   /**

@@ -54,8 +54,6 @@ let appWin;
 let appPreload;
 let appLogin;
 
-//store.set('changeLog', true);
-
 /**
  * * Función de ventana principal
  */

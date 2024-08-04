@@ -9,10 +9,18 @@ interface Data { version: string; changelog: string; }
 })
 export class StorageService {
 
+  /**
+   * *Propiedades
+   */
   public UserDataBehavior: BehaviorSubject<UserData>
   private avatars: string[] = ['assets/avatars/Batman-256.png', 'assets/avatars/Capitan-America-256.png', 'assets/avatars/Daredevil-256.png', 'assets/avatars/Green-Lantern-256.png', 'assets/avatars/Invisible-Woman-256.png', 'assets/avatars/Mister-Fantastic-256.png', 'assets/avatars/Namor-256.png', 'assets/avatars/Silver-Surfer-256.png', 'assets/avatars/Superman-256.png', 'assets/avatars/the-Thing-256.png'];
   private themes: string[] = ['Sweet Honey', 'Healthy Sky', 'Tasty Licorice', 'Gray Storm'];
+  private companies: string[] = ['Amazon', 'Digikey', 'Farnell', 'Hispaprint', 'Jlcpcb', 'Mouser', 'Pixarprinting', 'Rs'];
+  private categories: string[] = ['Altavoces', 'Antenas', 'Cables', 'Carcasas', 'Circuitos Impresos', 'Compuestos Encapsulantes', 'Condensadores', 'Conectores', 'Conmutadores', 'Contactos', 'Diodos', 'Embalajes', 'Fuentes Alimentacion', 'Fusibles', 'Inductores', 'Integrados', 'Interruptores', 'Microcontroladores', 'Mosfets', 'Octoacopladores', 'Ojales', 'Pantallas', 'Pasamuros', 'Portafusibles', 'Portaleds', 'Pulsadores', 'Reguladores', 'Reles', 'Resistencias', 'Sensores', 'Soportes', 'Terminales', 'Termistores', 'Transistores', 'Varistores', 'Vinilos'];
 
+  /**
+   * *Constructor de la clase
+   */
   constructor() {
     this.UserDataBehavior = new BehaviorSubject<UserData>(JSON.parse(sessionStorage.getItem('userData')));
   }
@@ -52,6 +60,18 @@ export class StorageService {
    * @returns Devuelve un array de tipo String
    */
   public getThemes(): string[] { return this.themes }
+
+  /**
+   * *Function: Obtiene las empresas
+   * @returns Devuelve un array de tipo String
+   */
+  public getCompanies(): string[] { return this.companies }
+
+  /**
+   * *Function: Obtiene las categorias
+   * @returns Devuelve un array de tipo String
+   */
+  public getCategories(): string[] { return this.categories }
 
   /**
    * *Function: Obtiene la version de la app y el CHANGELOG
