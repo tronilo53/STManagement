@@ -18,7 +18,7 @@
                                 <label for="categoria" class="form-label">Categoría</label>
                                 <select name="categoria" class="form-control" id="categoria" [(ngModel)]="categoria" #categoriaSelect (focus)="deleteBorder()">
                                     <option value="???" selected>Seleccione...</option>
-                                    <option [value]="c" *ngFor="let c of storageService.getApparatus()">{{ c }}</option>
+                                    <option [value]="c" *ngFor="let c of storageService.getDevices()">{{ c }}</option>
                                 </select>
                             </div>
                             <div class="col-4"></div>
@@ -56,7 +56,7 @@
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of devices">
                         <img [src]="a.imagen" [alt]="a.categoria" style="width: 3rem;">
-                        <span [class]="storageService.getThemeCss('badge')">{{ a.referencia }}</span>
+                        <span [class]="storageService.getThemeCss('badge')">{{ a.codigo }}</span>
                     </li>
                 </ul>
             </div>

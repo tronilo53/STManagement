@@ -17,6 +17,8 @@ import { ChangelogComponent } from './changelog/changelog.component';
 import { ComponentsComponent } from './others/components/components.component';
 import { DevicesComponent } from './others/devices/devices.component';
 import { DirectivesModule } from '../directives/directives.module';
+import { AddComponentsComponent } from './admin/add-components/add-components.component';
+import { AddDevicesComponent } from './admin/add-devices/add-devices.component';
 
 
 
@@ -32,7 +34,9 @@ import { DirectivesModule } from '../directives/directives.module';
     OrdersComponent,
     ChangelogComponent,
     ComponentsComponent,
-    DevicesComponent
+    DevicesComponent,
+    AddComponentsComponent,
+    AddDevicesComponent
   ],
   imports: [
     CommonModule,

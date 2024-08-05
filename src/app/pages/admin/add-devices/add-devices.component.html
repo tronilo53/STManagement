@@ -1,0 +1,34 @@
+<div class="addDevices animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+                <h2>Agregar Equipos Desincal</h2>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <form>
+                    <fieldset #fieldset>
+                    <legend>Rellena todos los campos</legend>
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <select id="categoria" name="categoria" class="form-select" [(ngModel)]="data.categoria" #categoria (focus)="quitBorder('categoria')">
+                            <option value="???">Seleccione...</option>
+                            <option [value]="c" *ngFor="let c of storageService.getDevices()">{{ c }}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigo" class="form-label">Código</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código..." [(ngModel)]="data.codigo" #codigo (focus)="quitBorder('codigo')">
+                    </div>
+                    <button type="button" [class]="storageService.getThemeCss('button')" (click)="validateDevice()" *ngIf="!isLoading">Añadir Equipo</button>
+                    <button type="button" [class]="storageService.getThemeCss('button')" disabled *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span role="status" class="m-1">Espere...</span>
+                    </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

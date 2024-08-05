@@ -2,7 +2,7 @@ export interface Components {
     id: number; 
     nombre: string; 
     descripcion: string; 
-    referencia: string; 
+    referencias: string; 
     empresa: string; 
     categoria: string; 
     imagen: string; 

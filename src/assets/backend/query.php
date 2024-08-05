@@ -135,6 +135,18 @@
 			$stmt -> execute([ $params->categoria ]);
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
+		//AGREGAR NUEVO APARATO
+		case '010':
+			$stmt = $pdo -> prepare('SELECT COUNT(*) FROM aparatos WHERE codigo = ?');
+			$stmt -> execute([ $params->data->codigo ]);
+			if($stmt -> fetchColumn() > 0) $res = ['response' => '002'];
+			else {
+				$stmt = $pdo -> prepare('INSERT INTO aparatos (codigo, categoria, imagen) VALUES (?,?,?)');
+				$stmt -> execute([ $params->data->codigo, $params->data->categoria, $params->data->imagen ]);
+				if($stmt) $res = ['response' => '001'];
+				else $res = ['response' => '003'];
+			}
+		break;
 	}
 
 	header('Content-Type: application/json');

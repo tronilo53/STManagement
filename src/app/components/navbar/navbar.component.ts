@@ -39,7 +39,9 @@ export class NavbarComponent implements OnInit {
   public isDropdownActive_Manag(): boolean {
     return this.currentUrl === '/Dashboard/Simulation' ||
            this.currentUrl === '/Dashboard/Orders' ||
-           this.currentUrl === '/Dashboard/Taxs';
+           this.currentUrl === '/Dashboard/Taxs' ||
+           this.currentUrl === '/Dashboard/AddComponents' ||
+           this.currentUrl === '/Dashboard/AddDevices';
   }
   /**
    * *Function: Comprueba la ruta actual del dropdown 'Stock'

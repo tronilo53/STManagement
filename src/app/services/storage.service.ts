@@ -17,7 +17,7 @@ export class StorageService {
   private themes: string[] = ['Sweet Honey', 'Healthy Sky', 'Tasty Licorice', 'Gray Storm'];
   private companies: string[] = ['Amazon', 'Digikey', 'Farnell', 'Hispaprint', 'Jlcpcb', 'Mouser', 'Pixarprinting', 'Rs'];
   private categories: string[] = ['Altavoces', 'Antenas', 'Cables', 'Carcasas', 'Circuitos Impresos', 'Compuestos Encapsulantes', 'Condensadores', 'Conectores', 'Conmutadores', 'Contactos', 'Diodos', 'Embalajes', 'Fuentes Alimentacion', 'Fusibles', 'Inductores', 'Integrados', 'Interruptores', 'Microcontroladores', 'Mosfets', 'Octoacopladores', 'Ojales', 'Pantallas', 'Pasamuros', 'Portafusibles', 'Portaleds', 'Pulsadores', 'Reguladores', 'Reles', 'Resistencias', 'Sensores', 'Soportes', 'Terminales', 'Termistores', 'Transistores', 'Varistores', 'Vinilos'];
-  private apparatus: string[] = ['GBD1', 'GBD2', 'GPD3', 'GPD4', 'GAD5', 'GADI5', 'GAD10', 'GADI10', 'GAD50', 'GADI50', 'GAD75', 'GADI75'];
+  private devices: string[] = ['GBD1', 'GBD2', 'GPD3', 'GPD4', 'GAD5', 'GADI5', 'GAD10', 'GADI10', 'GAD50', 'GADI50', 'GAD75', 'GADI75'];
 
   /**
    * *Constructor de la clase
@@ -78,7 +78,7 @@ export class StorageService {
    * *Function: Obtiene los aparatos
    * @returns Devuelve un array de tipo String
    */
-  public getApparatus(): string[] { return this.apparatus }
+  public getDevices(): string[] { return this.devices }
 
   /**
    * *Function: Obtiene la version de la app y el CHANGELOG

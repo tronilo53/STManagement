@@ -12,6 +12,8 @@ import { ChangelogComponent } from './pages/changelog/changelog.component';
 import { DataGuard } from './guards/data.guard';
 import { ComponentsComponent } from './pages/others/components/components.component';
 import { DevicesComponent } from './pages/others/devices/devices.component';
+import { AddComponentsComponent } from './pages/admin/add-components/add-components.component';
+import { AddDevicesComponent } from './pages/admin/add-devices/add-devices.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
@@ -28,6 +30,8 @@ const routes: Routes = [
       { path: 'Simulation', component: SimulationComponent },
       { path: 'Taxs', component: TaxsComponent },
       { path: 'Orders', component: OrdersComponent },
+      { path: 'AddComponents', component: AddComponentsComponent },
+      { path: 'AddDevices', component: AddDevicesComponent },
       { path: 'Profile', component: ProfileComponent },
       { path: '**', pathMatch: 'full', redirectTo: 'Home' }
     ]

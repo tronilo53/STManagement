@@ -1,6 +1,6 @@
 export interface Devices {
     id: number;
-    referencia: string;
+    codigo: string;
     categoria: string;
     imagen: string;
 }
