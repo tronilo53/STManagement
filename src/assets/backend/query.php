@@ -168,10 +168,9 @@
 				$referencias_fusionadas = json_encode(array_merge($referencias_existentes, $referencias_nuevas));
 				//Se suman las cantidades
 				$cantidad_nueva = $row['cantidad'] + $params->data->cantidad;
-				$res = ['response' => "Cantidad Nueva: $cantidad_nueva"];
 				//Se actualiza el componente con los nuevos datos
-				$stmt = $pdo -> prepare('UPDATE componentes SET referencias = ?, cantidad = ?');
-				$stmt -> execute([ $referencias_fusionadas, $cantidad_nueva ]);
+				$stmt = $pdo -> prepare('UPDATE componentes SET referencias = ?, cantidad = ? WHERE id = ?');
+				$stmt -> execute([ $referencias_fusionadas, $cantidad_nueva, $params->data->id ]);
 				//Si se actualiza correctamente...
 				if($stmt) $res = ['response' => '004'];
 				else $res = ['response' => '005'];

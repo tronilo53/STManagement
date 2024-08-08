@@ -102,13 +102,13 @@ export class AddComponentsComponent implements OnInit {
         this.renderer.addClass(this.categoria.nativeElement, 'border__error');
       //Si la categoria está rellena al elegir nuevoNombre...
       }else {
-        //Si la cantidad es 0
-        if(this.dataNgModel.cantidad === 0) {
+        //Si la cantidad es 0 o es nula
+        if(this.dataNgModel.cantidad === 0 || this.dataNgModel.cantidad === null) {
           //Se muestra una alerta
-          this.controllerService.alert('info', 'La cantidad no puede ser 0');
+          this.controllerService.alert('info', 'La cantidad es 0 o no es válida');
           //Se pone el borde rojo en la cantidad
           this.renderer.addClass(this.cantidad.nativeElement, 'border__error');
-        //Si la cantidad es distinta de 0
+        //Si la cantidad es distinta de 0 o null
         }else {
           //Se unen los arrays de las referencias
           this.references = [...this.references_1, ...this.references_2];
