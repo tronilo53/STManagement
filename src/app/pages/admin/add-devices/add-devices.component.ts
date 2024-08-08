@@ -140,7 +140,12 @@ export class AddDevicesComponent implements OnInit {
         this.controllerService.toast('top', 'success', 'Equipo insertado con éxito!');
       }
       //Si el equipo ya existe
-      if(resp.response === '002') this.controllerService.alert('info', 'Este equipo ya existe y no se insertará');
+      if(resp.response === '002') {
+        //Se muestra una alerta
+        this.controllerService.alert('info', 'Este equipo ya existe y no se insertará');
+        //se pone el campo codigo en rojo
+        this.renderer.addClass(this.codigo.nativeElement, 'border__error');
+      }
       //Si no se inserta el equipo
       if(resp.response === '003') this.controllerService.alert('error', 'Ha habido un problema al agregar el Equipo. Error: [010]003');
       //Se habilita el formulario

@@ -19,7 +19,7 @@ export class DevicesComponent implements OnInit {
   public loading: boolean = false;
   public isUpVisible: boolean = false;
   public categoria: string = '???';
-  private flag: boolean = false;
+  public flag: boolean = false;
   public showApparatus: string = '';
 
   constructor(
@@ -120,6 +120,8 @@ export class DevicesComponent implements OnInit {
       this.dataService.http({ code: '008' }).subscribe((resp: Devices[]) => {
         //Se guardan todos los componentes
         this.devices = resp;
+        //se modifica la bandera del filtro
+        this.flag = false;
         //Se oculta el loading
         this.loading = false;
       });

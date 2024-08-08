@@ -1,1 +1,133 @@
-<p>add-components works!</p>
+<div class="addComponents animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+                <h2>Agregar Componentes</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <form>
+                    <fieldset #fieldsetAll>
+                        <legend>Rellena todos los campos</legend>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="nombreExistente" class="form-label">Componente Existente</label>
+                                    <select 
+                                    name="nombreExistente" 
+                                    id="nombreExistente" 
+                                    class="form-select" 
+                                    [(ngModel)]="dataNgModel.nombreExistente" 
+                                    [disabled]="isNombreExistente()" 
+                                    #nombreExistente 
+                                    (focus)="quitBorder()"
+                                    (change)="resetFields()">
+                                        <option value="???">Seleccione</option>
+                                        <option [value]="name.id" *ngFor="let name of names">{{ name.nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="nuevoNombre" class="form-label">Nuevo Componente</label>
+                                    <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="nuevoNombre" 
+                                    name="nuevoNombre" 
+                                    placeholder="Nombre..." 
+                                    [(ngModel)]="dataNgModel.nuevoNombre" 
+                                    [disabled]="isNuevoNombre()" 
+                                    #nuevoNombre 
+                                    (focus)="quitBorder()"
+                                    (change)="resetFields()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="categoria" class="form-label">Categoría</label>
+                                    <select id="categoria" name="categoria" class="form-select" [(ngModel)]="dataNgModel.categoria" [disabled]="isCategoria()" #categoria (focus)="quitBorder()">
+                                        <option value="???">Seleccione...</option>
+                                        <option [value]="item" *ngFor="let item of storageService.getCategories()">{{ item }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="cantidad" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad..." [(ngModel)]="dataNgModel.cantidad" #cantidad (focus)="quitBorder()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-check form-switch mt-3">
+                            <input class="form-check-input" type="checkbox" role="switch" name="isReferences" id="isReferences" [(ngModel)]="isReferences" (change)="checkIsReferences()">
+                            <label class="form-check-label" for="isReferences">Agregar Referencias</label>
+                        </div>
+                        <fieldset [disabled]="!isReferences ? 'true' : ''">
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="empresa" class="form-label">Empresa</label>
+                                        <select name="empresa" id="empresa" class="form-select" #empresa [(ngModel)]="dataNgModel.referencias.empresa" (focus)="quitBorder()">
+                                            <option value="???">Seleccione</option>
+                                            <option [value]="item" *ngFor="let item of storageService.getCompanies()">{{ item }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="codigo" class="form-label">Código</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código..." #codigo [(ngModel)]="dataNgModel.referencias.codigo" (focus)="quitBorder()">
+                                            <button type="button" [class]="storageService.getThemeCss('button')" (click)="validateReferences()">
+                                                <span class="material-symbols-outlined" style="vertical-align: middle;">add</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row" *ngIf="references_1.length > 0 || references_2.length > 0">
+                            <div class="col-6">
+                                <ul>
+                                    <li *ngFor="let item of references_1; let i = index" class="m-0 p-0" style="font-size: 0.9rem;">
+                                        <span [class]="storageService.getThemeCss('badge') + ' m-1'">
+                                            Empresa: {{ item.empresa }} - Codigo: {{ item.codigo }}
+                                            <button type="button" class="btn-close" (click)="quitReference('c1', i)"></button>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <ul>
+                                    <li *ngFor="let item of references_2; let i = index" class="m-0 p-0" style="font-size: 0.9rem;">
+                                        <span [class]="storageService.getThemeCss('badge') + ' m-1'">
+                                            Empresa: {{ item.empresa }} - Codigo: {{ item.codigo }}
+                                            <button type="button" class="btn-close" (click)="quitReference('c2', i)"></button>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button 
+                        type="button" 
+                        [class]="storageService.getThemeCss('button')" 
+                        (click)="validateDataComponent()" 
+                        *ngIf="!isLoading">Añadir Componente</button>
+                        <button 
+                        type="button" 
+                        [class]="storageService.getThemeCss('button')" 
+                        disabled 
+                        *ngIf="isLoading">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status" class="m-1">Espere...</span>
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

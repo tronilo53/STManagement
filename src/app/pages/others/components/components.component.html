@@ -15,23 +15,17 @@
                     <div class="card-body">
                         <form class="row g-3">
                             <div class="col-4">
-                                <label for="empresa" class="form-label">Empresa</label>
-                                <select name="empresa" class="form-control" id="empresa" [(ngModel)]="filter.empresa" #empresa (focus)="deleteBorder('empresa')">
-                                    <option value="???" selected>Seleccione...</option>
-                                    <option [value]="c" *ngFor="let c of storageService.getCompanies()">{{ c }}</option>
-                                </select>
-                            </div>
-                            <div class="col-4">
                                 <label for="categoria" class="form-label">Categoría</label>
-                                <select name="categoria" class="form-control" id="categoria" [(ngModel)]="filter.categoria" #categoria (focus)="deleteBorder('categoria')">
+                                <select name="categoria" class="form-control" id="categoria" [(ngModel)]="filter.categoria" #categoria (focus)="quitBorder()">
                                     <option value="???" selected>Seleccione...</option>
                                     <option [value]="c" *ngFor="let c of storageService.getCategories()">{{ c }}</option>
                                 </select>
                             </div>
+                            <div class="col-4"></div>
                             <div class="col-4">
                                 <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                                     <button type="button" [class]="storageService.getThemeCss('button') + ' w-100'" (click)="validateApply()">Aplicar</button>
-                                    <button type="button" class="btn btn-outline-secondary w-100" (click)="quitApply()">Quitar Filtros</button>
+                                    <button type="button" [ngClass]="{'disabled': !flag}" class="btn btn-danger w-100" (click)="quitApply()">Quitar Filtros</button>
                                 </div>
                             </div>
                         </form>
@@ -61,9 +55,6 @@
             <div class="col mb-5">
                 <div class="card mb-2" *ngFor="let c of components">
                     <div class="row g-0">
-                        <div class="col-md-4 text-center align-content-center">
-                            <img [src]="c.imagen" style="width: 7rem;" alt="...">
-                        </div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">
@@ -71,9 +62,12 @@
                                     <span [class]="storageService.getThemeCss('badge')" *ngIf="c.cantidad > 0">Cantidad: {{ c.cantidad }}</span>
                                     <span class="badge text-bg-danger" *ngIf="c.cantidad == 0">Sin Stock</span>
                                 </h5>
-                                <p class="card-text">{{ c.descripcion }}</p>
-                                <p class="card-text text-dark m-0"><strong>Referencia/s: </strong>{{ c.referencias }}</p>
-                                <p class="card-text text-dark m-0"><strong>Empresa: </strong>{{ c.empresa }}</p>
+                                <div class="references" *ngIf="c.referencias.length > 0">
+                                    <p class="card-text text-dark m-0"><strong>Referencias:</strong></p>
+                                    <ul>
+                                        <li *ngFor="let r of c.referencias">[ Empresa: {{ r.empresa }} - Codigo: {{ r.codigo }} ]</li>
+                                    </ul>
+                                </div>
                                 <p class="card-text text-dark m-0"><strong>Categoría: </strong>{{ c.categoria }}</p>
                             </div>
                         </div>

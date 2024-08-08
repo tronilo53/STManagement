@@ -1,9 +1,13 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { map } from 'rxjs/operators';
+
 import { StorageService } from '../../../services/storage.service';
 import { DataService } from '../../../services/data.service';
-import { Components } from '../../../interfaces/components.interface';
 import { ControllerService } from '../../../services/controller.service';
-import { FilterComponents } from '../../../interfaces/filter.components.interface';
+
+export interface Components { id: number; nombre: string; referencias: References[]; categoria: string; cantidad: number; };
+export interface References { empresa: string; codigo: string; };
+export interface FilterComponents { categoria: string; };
 
 @Component({
   selector: 'app-components',
@@ -15,13 +19,12 @@ export class ComponentsComponent implements OnInit {
   /**
    * *Propiedades
    */
-  @ViewChild('empresa') empresa: ElementRef;
   @ViewChild('categoria') categoria: ElementRef;
   public components: Components[] = [];
   public loading: boolean = false;
   public isUpVisible: boolean = false;
-  public filter: FilterComponents = { empresa: '???', categoria: '???' };
-  private flag: boolean = false;
+  public filter: FilterComponents = { categoria: '???' };
+  public flag: boolean = false;
   public showComponents: string = '';
 
   constructor(
@@ -35,11 +38,16 @@ export class ComponentsComponent implements OnInit {
     //Muestra el loading
     this.loading = true;
     //Obtiene todos los componentes
-    this.dataService.http({ code: '006' }).subscribe((resp: Components[]) => {
+    this.dataService.http({ code: '006' }).pipe(
+      map((componentes: any) => {
+        return componentes.map((componente: any) => {
+          componente.referencias = JSON.parse(componente.referencias);
+          return componente;
+        });
+      })
+    ).subscribe((resp: Components[]) => {
       //Guarda los componentes obtenidos
       this.components = resp;
-      //Filtra los componentes que no tengan imagen y se les aplica una por defecto
-      this.replaceImage();
       //Se modifica el showComponents
       this.showComponents = 'Todos los Componentes';
       //Oculta el loading
@@ -51,10 +59,7 @@ export class ComponentsComponent implements OnInit {
    * *Function: Quita el border__error
    * @param element elemento a quitar el borde
    */
-  public deleteBorder(element: string): void {
-    if(element === 'empresa') this.renderer.removeClass(this.empresa.nativeElement, 'border__error');
-    else this.renderer.removeClass(this.categoria.nativeElement, 'border__error');
-  }
+  public quitBorder(): void { this.renderer.removeClass(this.categoria.nativeElement, 'border__error') }
 
   /**
    * *Funtion: identifica el scroll de la pantalla
@@ -76,54 +81,38 @@ export class ComponentsComponent implements OnInit {
    */
   public validateApply(): void {
     //si los dos campos están vacios...
-    if(this.filter.empresa === '???' && this.filter.categoria === '???') {
+    if(this.filter.categoria === '???') {
       //Se muestra una alerta
-      this.controllerService.alert('info', 'Por lo menos un campo es requerido');
-      //Se ponen los campos en rojo
-      this.renderer.addClass(this.empresa.nativeElement, 'border__error');
+      this.controllerService.alert('info', 'La categoría es requerida');
+      //Se pone el campo de categoria en rojo
       this.renderer.addClass(this.categoria.nativeElement, 'border__error');
-    }
-    //Si la empresa está rellena
-    else if(this.filter.empresa !== '???' && this.filter.categoria === '???') this.apply('empresa');
-    //Si la categoria está rellena
-    else if(this.filter.empresa === '???' && this.filter.categoria !== '???') this.apply('categoria');
-    //Si los dos campos están rellenos
-    else this.apply('ambos');
+    //Si la categoria está rellena...
+    }else this.apply();
   }
 
   /**
    * *Function: Se aplican los filtros
-   * @param element 
    */
-  public apply(element: 'empresa' | 'categoria' | 'ambos'): void {
+  public apply(): void {
     //Pone la bandera en true para saber que se ha aplicado algo
     this.flag = true;
     //Muestra el loading
     this.loading = true;
     //Se resetean los componentes
     this.components = [];
-    //Crea un objeto para el envio
-    let data: any = { element: '', value: '' };
-    //Modifica el objeto depende de los datos aplicados
-    if(element === 'empresa') {
-      data = { ...data, element: 'empresa', value: this.filter.empresa };
-      //Se modifica el showComponents
-      this.showComponents = `Empresa: ${this.filter.empresa.toUpperCase()}`;
-    }else if(element === 'categoria') {
-      data = { ...data, element: 'categoria', value: this.filter.categoria };
-      //Se modifica el showComponents
-      this.showComponents = `Categoria: ${this.filter.categoria.toUpperCase()}`;
-    }else {
-      data = { ...data, element: 'ambos', empresa: this.filter.empresa, categoria: this.filter.categoria };
-      //Se modifica el showComponents
-      this.showComponents = `Empresa: ${this.filter.empresa.toUpperCase()} | Categoria: ${this.filter.categoria.toUpperCase()}`;
-    } 
+    //Se modifica el showComponents
+    this.showComponents = `Categoria: ${this.filter.categoria}`;
     //Peticion para filtrar
-    this.dataService.http({ code: '007', data }).subscribe((resp: Components[]) => {
+    this.dataService.http({ code: '007', categoria: this.filter.categoria }).pipe(
+      map((componentes: any) => {
+        return componentes.map((componente: any) => {
+          componente.referencias = JSON.parse(componente.referencias);
+          return componente;
+        });
+      })
+    ).subscribe((resp: Components[]) => {
       //Se guardan los componentes filtrados
-      this.components = resp
-      //Se filtran los componentes para aplicarles imagen si no tienen
-      this.replaceImage();
+      this.components = resp;
       //Se oculta el loading
       this.loading = false;
     });
@@ -141,28 +130,24 @@ export class ComponentsComponent implements OnInit {
       this.components = [];
       //Resetea todos los campos
       this.filter.categoria = '???';
-      this.filter.empresa = '???';
       //Resetea el showComponents
       this.showComponents = 'Todos los Componentes';
       //Petición para obtener todos los componentes
-      this.dataService.http({ code: '006' }).subscribe((resp: Components[]) => {
+      this.dataService.http({ code: '006' }).pipe(
+        map((componentes: any) => {
+          return componentes.map((componente: any) => {
+            componente.referencias = JSON.parse(componente.referencias);
+            return componente;
+          });
+        })
+      ).subscribe((resp: Components[]) => {
         //Se guardan todos los componentes
         this.components = resp;
-        //Se filtran los componentes para aplicarles imagen si no tienen
-        this.replaceImage();
+        //Se cambia la bandera del filtro
+        this.flag = false;
         //Se oculta el loading
         this.loading = false;
       });
     }
-  }
-
-  /**
-   * *Function: Se reemplaza la imagen por una por defecto
-   */
-  private replaceImage(): void {
-    this.components = this.components.map(item => {
-      if(item.imagen === '') item.imagen = 'assets/no_image.png';
-      return item;
-    });
   }
 }

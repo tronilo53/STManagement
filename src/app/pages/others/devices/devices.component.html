@@ -25,7 +25,7 @@
                             <div class="col-4">
                                 <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                                     <button type="button" [class]="storageService.getThemeCss('button') + ' w-100'" (click)="validateApply()">Aplicar</button>
-                                    <button type="button" class="btn btn-outline-secondary w-100" (click)="quitApply()">Quitar Filtros</button>
+                                    <button type="button" [ngClass]="{'disabled': !flag}" class="btn btn-danger w-100" (click)="quitApply()">Quitar Filtros</button>
                                 </div>
                             </div>
                         </form>

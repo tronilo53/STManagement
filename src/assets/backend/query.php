@@ -108,19 +108,8 @@
 		break;
 		//OBTENER TODOS LOS COMPONENTES FILTRADOS
 		case '007':
-			//Si se recibe empresa
-			if($params->data->element === 'empresa') {
-				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE empresa = ?');
-				$stmt -> execute([ $params->data->value ]);
-			//Si se recibe categoria
-			}else if($params->data->element === 'categoria') {
-				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE categoria = ?');
-				$stmt -> execute([ $params->data->value ]);
-			//Si se reciben ambos
-			}else {
-				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE empresa = ? AND categoria = ?');
-				$stmt -> execute([ $params->data->empresa, $params->data->categoria ]);
-			}
+			$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE categoria = ?');
+			$stmt -> execute([ $params->categoria ]);
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
 		//OBTENER TODOS LOS APARATOS
@@ -145,6 +134,47 @@
 				$stmt -> execute([ $params->data->codigo, $params->data->categoria, $params->data->imagen ]);
 				if($stmt) $res = ['response' => '001'];
 				else $res = ['response' => '003'];
+			}
+		break;
+		//AGREGAR NUEVO COMPONENTE
+		case '011':
+			//Si es un componente nuevo...
+			if($params->data->nombre !== '') {
+				//Comprobamos que el nombre no exista
+				$stmt = $pdo -> prepare('SELECT COUNT(*) FROM componentes WHERE nombre = ?');
+				$stmt -> execute([ $params->data->nombre ]);
+				//Si el nombre ya existe...
+				if($stmt -> fetchColumn() > 0) $res = ['response' => '001'];
+				//Si el nombre no existe...
+				else {
+					$stmt = $pdo -> prepare('INSERT INTO componentes (nombre, referencias, categoria, cantidad) VALUES (?,?,?,?)');
+					$stmt -> execute([ $params->data->nombre, $params->data->referencias, $params->data->categoria, $params->data->cantidad ]);
+					//Si el componente se inserta con éxito...
+					if($stmt) $res = ['response' => '002'];
+					//Si el componente no se inserta
+					else $res = ['response' => '003'];
+				}
+			//Si es un componente existente...
+			}else {
+				//Se obtiene el componente
+				$stmt = $pdo -> prepare('SELECT * FROM componentes WHERE id = ?');
+				$stmt -> execute([ $params->data->id ]);
+				//Se guarda el componente
+				$row = $stmt -> fetch(PDO::FETCH_ASSOC);
+				//Se parsean las referencias tanto pasadas como existentes del componente
+				$referencias_nuevas = json_decode($params->data->referencias, true);
+				$referencias_existentes = json_decode($row['referencias'], true);
+				//Se fusionan las referencias y se convierten a string las haya o no las haya
+				$referencias_fusionadas = json_encode(array_merge($referencias_existentes, $referencias_nuevas));
+				//Se suman las cantidades
+				$cantidad_nueva = $row['cantidad'] + $params->data->cantidad;
+				$res = ['response' => "Cantidad Nueva: $cantidad_nueva"];
+				//Se actualiza el componente con los nuevos datos
+				$stmt = $pdo -> prepare('UPDATE componentes SET referencias = ?, cantidad = ?');
+				$stmt -> execute([ $referencias_fusionadas, $cantidad_nueva ]);
+				//Si se actualiza correctamente...
+				if($stmt) $res = ['response' => '004'];
+				else $res = ['response' => '005'];
 			}
 		break;
 	}

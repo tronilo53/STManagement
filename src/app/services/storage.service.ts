@@ -15,7 +15,7 @@ export class StorageService {
   public UserDataBehavior: BehaviorSubject<UserData>
   private avatars: string[] = ['assets/avatars/Batman-256.png', 'assets/avatars/Capitan-America-256.png', 'assets/avatars/Daredevil-256.png', 'assets/avatars/Green-Lantern-256.png', 'assets/avatars/Invisible-Woman-256.png', 'assets/avatars/Mister-Fantastic-256.png', 'assets/avatars/Namor-256.png', 'assets/avatars/Silver-Surfer-256.png', 'assets/avatars/Superman-256.png', 'assets/avatars/the-Thing-256.png'];
   private themes: string[] = ['Sweet Honey', 'Healthy Sky', 'Tasty Licorice', 'Gray Storm'];
-  private companies: string[] = ['Amazon', 'Digikey', 'Farnell', 'Hispaprint', 'Jlcpcb', 'Mouser', 'Pixarprinting', 'Rs'];
+  private companies: string[] = ['AMAZON', 'DIGIKEY', 'FARNELL', 'HISPAPRINT', 'JLCPCB', 'MOUSER', 'PIXARPRINTING', 'RS'];
   private categories: string[] = ['Altavoces', 'Antenas', 'Cables', 'Carcasas', 'Circuitos Impresos', 'Compuestos Encapsulantes', 'Condensadores', 'Conectores', 'Conmutadores', 'Contactos', 'Diodos', 'Embalajes', 'Fuentes Alimentacion', 'Fusibles', 'Inductores', 'Integrados', 'Interruptores', 'Microcontroladores', 'Mosfets', 'Octoacopladores', 'Ojales', 'Pantallas', 'Pasamuros', 'Portafusibles', 'Portaleds', 'Pulsadores', 'Reguladores', 'Reles', 'Resistencias', 'Sensores', 'Soportes', 'Terminales', 'Termistores', 'Transistores', 'Varistores', 'Vinilos'];
   private devices: string[] = ['GBD1', 'GBD2', 'GPD3', 'GPD4', 'GAD5', 'GADI5', 'GAD10', 'GADI10', 'GAD50', 'GADI50', 'GAD75', 'GADI75'];
 

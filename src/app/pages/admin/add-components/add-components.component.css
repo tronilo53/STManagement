@@ -1,0 +1,6 @@
+select {
+    cursor: pointer;
+}
+.border__error {
+    border: 1px solid var(--bs-danger);
+}
