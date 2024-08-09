@@ -19,6 +19,7 @@ import { DevicesComponent } from './others/devices/devices.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { AddComponentsComponent } from './admin/add-components/add-components.component';
 import { AddDevicesComponent } from './admin/add-devices/add-devices.component';
+import { AddModelsComponent } from './admin/add-models/add-models.component';
 
 
 
@@ -36,7 +37,8 @@ import { AddDevicesComponent } from './admin/add-devices/add-devices.component';
     ComponentsComponent,
     DevicesComponent,
     AddComponentsComponent,
-    AddDevicesComponent
+    AddDevicesComponent,
+    AddModelsComponent
   ],
   imports: [
     CommonModule,

@@ -14,6 +14,7 @@ import { ComponentsComponent } from './pages/others/components/components.compon
 import { DevicesComponent } from './pages/others/devices/devices.component';
 import { AddComponentsComponent } from './pages/admin/add-components/add-components.component';
 import { AddDevicesComponent } from './pages/admin/add-devices/add-devices.component';
+import { AddModelsComponent } from './pages/admin/add-models/add-models.component';
 
 const routes: Routes = [
   { path: 'Preload', component: PreloadComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: 'Orders', component: OrdersComponent },
       { path: 'AddComponents', component: AddComponentsComponent },
       { path: 'AddDevices', component: AddDevicesComponent },
+      { path: 'AddModels', component: AddModelsComponent },
       { path: 'Profile', component: ProfileComponent },
       { path: '**', pathMatch: 'full', redirectTo: 'Home' }
     ]

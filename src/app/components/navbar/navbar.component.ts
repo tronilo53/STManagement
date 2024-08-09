@@ -41,7 +41,8 @@ export class NavbarComponent implements OnInit {
            this.currentUrl === '/Dashboard/Orders' ||
            this.currentUrl === '/Dashboard/Taxs' ||
            this.currentUrl === '/Dashboard/AddComponents' ||
-           this.currentUrl === '/Dashboard/AddDevices';
+           this.currentUrl === '/Dashboard/AddDevices' ||
+           this.currentUrl === '/Dashboard/AddModels';
   }
   /**
    * *Function: Comprueba la ruta actual del dropdown 'Stock'

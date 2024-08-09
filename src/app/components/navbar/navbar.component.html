@@ -21,13 +21,14 @@
                 <li class="nav-item dropdown" *ngIf="storageService.getUserData().tipo_usuario === 'adm'">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" [ngClass]="{ 'active': isDropdownActive_Manag() }">Gestiones</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Simulation']" routerLinkActive="active">Simulación</a></li>
-                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Orders']" routerLinkActive="active" >Pedidos</a></li>
+                        <li><a class="dropdown-item disabled" [routerLink]="['/Dashboard/Simulation']" routerLinkActive="active">Simulación</a></li>
+                        <li><a class="dropdown-item disabled" [routerLink]="['/Dashboard/Orders']" routerLinkActive="active" >Pedidos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/Taxs']" routerLinkActive="active" >Datos Fiscales</a></li>
+                        <li><a class="dropdown-item disabled" [routerLink]="['/Dashboard/Taxs']" routerLinkActive="active" >Datos Fiscales</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" [routerLink]="['/Dashboard/AddComponents']" routerLinkActive="active" >Agregar Componentes</a></li>
                         <li><a class="dropdown-item" [routerLink]="['/Dashboard/AddDevices']" routerLinkActive="active" >Agregar Equipos</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/Dashboard/AddModels']" routerLinkActive="active" >Agregar Modelo</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

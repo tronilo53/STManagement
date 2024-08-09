@@ -1,0 +1,41 @@
+<div class="addModels animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+                <h2>Agregar Nuevo Modelo</h2>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <form>
+                    <fieldset #fieldset>
+                        <legend>Rellena todos los campos</legend>
+                        <div class="mb-3">
+                            <label for="modelo" class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo..." [(ngModel)]="data.modelo" #modelo (focus)="quitBorder()">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="precioCoste" class="form-label">Precio Coste</label>
+                                    <input type="text" class="form-control" id="precioCoste" name="precioCoste" placeholder="Precio Coste..." [(ngModel)]="data.precioCoste" #precioCoste (focus)="quitBorder()">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="precioVenta" class="form-label">Precio Venta</label>
+                                    <input type="text" class="form-control" id="precioVenta" name="precioVenta" placeholder="Precio Venta..." [(ngModel)]="data.precioVenta" #precioVenta (focus)="quitBorder()">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" [class]="storageService.getThemeCss('button')" (click)="validateModel()" *ngIf="!isLoading">Añadir Modelo</button>
+                        <button type="button" [class]="storageService.getThemeCss('button')" disabled *ngIf="isLoading">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status" class="m-1">Espere...</span>
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

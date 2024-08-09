@@ -112,25 +112,25 @@
 			$stmt -> execute([ $params->categoria ]);
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
-		//OBTENER TODOS LOS APARATOS
+		//OBTENER TODOS LOS APARATOS EN STOCK
 		case '008':
-			$stmt = $pdo -> prepare('SELECT * FROM aparatos');
+			$stmt = $pdo -> prepare('SELECT * FROM aparatos_stock');
 			$stmt -> execute();
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
-		//OBTENER TODOS LOS APARATOS FILTRADOS
+		//OBTENER TODOS LOS APARATOS EN STOCK FILTRADOS
 		case '009':
-			$stmt = $pdo -> prepare('SELECT * FROM aparatos WHERE categoria = ?');
+			$stmt = $pdo -> prepare('SELECT * FROM aparatos_stock WHERE categoria = ?');
 			$stmt -> execute([ $params->categoria ]);
 			$res = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		break;
-		//AGREGAR NUEVO APARATO
+		//AGREGAR NUEVO APARATO A STOCK
 		case '010':
-			$stmt = $pdo -> prepare('SELECT COUNT(*) FROM aparatos WHERE codigo = ?');
+			$stmt = $pdo -> prepare('SELECT COUNT(*) FROM aparatos_stock WHERE codigo = ?');
 			$stmt -> execute([ $params->data->codigo ]);
 			if($stmt -> fetchColumn() > 0) $res = ['response' => '002'];
 			else {
-				$stmt = $pdo -> prepare('INSERT INTO aparatos (codigo, categoria, imagen) VALUES (?,?,?)');
+				$stmt = $pdo -> prepare('INSERT INTO aparatos_stock (codigo, categoria, imagen) VALUES (?,?,?)');
 				$stmt -> execute([ $params->data->codigo, $params->data->categoria, $params->data->imagen ]);
 				if($stmt) $res = ['response' => '001'];
 				else $res = ['response' => '003'];
@@ -174,6 +174,28 @@
 				//Si se actualiza correctamente...
 				if($stmt) $res = ['response' => '004'];
 				else $res = ['response' => '005'];
+			}
+		break;
+		//AGREGAR NUEVO MODELO
+		case '012':
+			//Cuenta los registros que sean igual a 'modelo'
+			$stmt = $pdo -> prepare('SELECT COUNT(*) FROM aparatos_modelos WHERE modelo = ?');
+			$stmt -> execute([ $params->data->modelo ]);
+			//Si el modelo existe
+			if($stmt -> fetchColumn() > 0) $res = ['response' => '001'];
+			//Si el modelo no existe...
+			else {
+				try {
+					//Se inserta el modelo
+					$stmt = $pdo -> prepare('INSERT INTO aparatos_modelos (modelo, precio_venta, precio_coste) VALUES (?,?,?)');
+					$stmt -> execute([ $params->data->modelo, $params->data->precioVenta, $params->data->precioCoste ]);
+					$res = ['response' => '002'];
+				} catch (Exception $e) {
+					$res = [
+						'response' => '003',
+						'error' => $e
+					];
+				}
 			}
 		break;
 	}
